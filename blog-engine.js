@@ -825,6 +825,7 @@ sudo -u#-1 /bin/bash
     savePwBtn.addEventListener('click', function () {
       var newPw = newPwInput.value.trim();
       if (!newPw) return;
+      if (newPw.length < 8) { showToast('Password must be at least 8 characters'); return; }
       var user = firebase.auth().currentUser;
       if (!user) { showToast('Not logged in'); return; }
       user.updatePassword(newPw).then(function () {
