@@ -1,0 +1,19 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Post images: public read, only admin UID can upload
+    match /post-images/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.uid == 'b4t5IxeGyLSGyozcweUrBV2fbzc2'
+                   && request.resource.size < 5 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+
+    // Everything else: deny
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -2382,3 +2382,44 @@ textarea.editor-input {
   background: rgba(0, 255, 140, 0.08);
   border-color: rgba(0, 255, 140, 0.3);
 }
+
+/* Blog reader search bar */
+.blog-search-bar {
+  max-width: 720px;
+  margin: 1.5rem auto 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  background: rgba(0, 255, 140, 0.04);
+  border: 1px solid rgba(0, 255, 140, 0.2);
+  border-radius: 4px;
+}
+.blog-search-bar:focus-within {
+  border-color: var(--green, #00ff8c);
+  box-shadow: 0 0 0 2px rgba(0, 255, 140, 0.15);
+}
+.blog-search-icon {
+  color: var(--green, #00ff8c);
+  font-size: 16px;
+}
+#blog-search {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text, #e6edf3);
+  font-family: inherit;
+  font-size: 14px;
+}
+#blog-search-clear {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+}
+#blog-search-clear:hover { color: var(--green, #00ff8c); }
+
+.post-readtime { color: var(--text-dim); font-size: 11px; }

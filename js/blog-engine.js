@@ -551,13 +551,29 @@ sudo -u#-1 /bin/bash
     return tags.some(function (t) { return CTF_TAGS.indexOf(t) !== -1; });
   }
 
-  function renderPostsOnBlog() {
+  function readingTime(post) {
+    var words = ((post.body || '') + ' ' + (post.summary || '')).split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.ceil(words / 200));
+  }
+
+  function matchesSearch(post, q) {
+    if (!q) return true;
+    q = q.toLowerCase();
+    return (post.title   || '').toLowerCase().indexOf(q) !== -1
+        || (post.tags    || '').toLowerCase().indexOf(q) !== -1
+        || (post.summary || '').toLowerCase().indexOf(q) !== -1
+        || (post.body    || '').toLowerCase().indexOf(q) !== -1;
+  }
+
+  function renderPostsOnBlog(searchQuery) {
     var ctfContainer   = document.getElementById('blog-ctf-posts');
     var notesContainer = document.getElementById('blog-notes-posts');
     if (!ctfContainer && !notesContainer) return;
 
-    var posts = getPosts().filter(function (p) { return p.status !== 'draft'; });
-    if (posts.length === 0) return; // keep placeholders
+    var q = (searchQuery || '').trim();
+    var posts = getPosts()
+      .filter(function (p) { return p.status !== 'draft'; })
+      .filter(function (p) { return matchesSearch(p, q); });
     posts.sort(function (a, b) { return b.date.localeCompare(a.date); });
 
     var ctfPosts   = posts.filter(isCTFPost);
@@ -568,18 +584,19 @@ sudo -u#-1 /bin/bash
       container.innerHTML = '';
       var emptyEl = document.getElementById(emptyId);
       if (list.length === 0) {
-        if (emptyEl) emptyEl.classList.remove('hidden');
+        if (emptyEl) { emptyEl.textContent = q ? 'No posts match "' + q + '".' : 'No posts yet.'; emptyEl.classList.remove('hidden'); }
         return;
       }
       if (emptyEl) emptyEl.classList.add('hidden');
       list.forEach(function (post) {
         var tags = (post.tags || '').split(/\s+/).filter(Boolean)
           .map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('');
+        var rt = readingTime(post);
         var div = document.createElement('div');
         div.className = 'post reveal';
         div.dataset.tags = post.tags || '';
         div.innerHTML =
-          '<span class="post-date">' + post.date + '</span>' +
+          '<span class="post-date">' + post.date + ' · <span class="post-readtime">' + rt + ' min read</span></span>' +
           '<h3><a href="post.html?id=' + post.id + '">' + escapeHtml(post.title) + '</a></h3>' +
           (post.summary ? '<p>' + escapeHtml(post.summary) + '</p>' : '') +
           '<div class="post-tags">' + tags + '</div>';
@@ -592,6 +609,20 @@ sudo -u#-1 /bin/bash
 
     renderInto(ctfContainer,   ctfPosts,   'ctf-empty');
     renderInto(notesContainer, notesPosts, 'notes-empty');
+  }
+
+  // ── Reader search wiring ──
+  function initBlogSearch() {
+    var input = document.getElementById('blog-search');
+    if (!input) return;
+    var clearBtn = document.getElementById('blog-search-clear');
+    input.addEventListener('input', function () {
+      renderPostsOnBlog(input.value);
+      if (clearBtn) clearBtn.style.visibility = input.value ? 'visible' : 'hidden';
+    });
+    if (clearBtn) clearBtn.addEventListener('click', function () {
+      input.value = ''; renderPostsOnBlog(''); clearBtn.style.visibility = 'hidden'; input.focus();
+    });
   }
 
   // ══════════════════════════════════
@@ -635,6 +666,23 @@ sudo -u#-1 /bin/bash
     if (!body || !titleEl) return;
 
     var params = new URLSearchParams(window.location.search);
+
+    // Preview mode — load from sessionStorage instead of Firestore
+    if (params.get('preview') === '1') {
+      try {
+        var data = JSON.parse(sessionStorage.getItem('bensec_preview'));
+        if (data) {
+          renderPostData(data);
+          // Add a preview banner
+          var banner = document.createElement('div');
+          banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff9500;color:#111;text-align:center;padding:6px;font-size:13px;z-index:9999;font-weight:bold;';
+          banner.textContent = '👁 PREVIEW MODE — not saved, not published';
+          document.body.appendChild(banner);
+          return;
+        }
+      } catch (e) {}
+    }
+
     var id = params.get('id');
     if (!id) return;
 
@@ -645,6 +693,13 @@ sudo -u#-1 /bin/bash
       body.innerHTML = '<p>This post doesn\'t exist.</p>';
       return;
     }
+    renderPostData(post);
+  }
+
+  function renderPostData(post) {
+    var body = document.getElementById('post-body-content');
+    var titleEl = document.getElementById('post-title');
+    if (!body || !titleEl) return;
 
     titleEl.textContent = post.title;
     document.title = post.title + ' | bensec';
@@ -1181,6 +1236,24 @@ sudo -u#-1 /bin/bash
       saveCurrentPost('draft');
     });
 
+    // ── Preview before publish ──
+    var previewPostBtn = document.getElementById('preview-post-btn');
+    if (previewPostBtn) {
+      previewPostBtn.addEventListener('click', function () {
+        var preview = {
+          id: editingId || 'preview',
+          title:   titleInput.value.trim() || 'Untitled',
+          date:    dateInput.value || new Date().toISOString().split('T')[0],
+          tags:    tagsInput.value.trim(),
+          summary: summaryInput.value.trim(),
+          body:    detokenizeImages(bodyInput.value),
+          status:  'published'
+        };
+        try { sessionStorage.setItem('bensec_preview', JSON.stringify(preview)); } catch (e) {}
+        window.open('post.html?preview=1', '_blank');
+      });
+    }
+
     // ── Keyboard shortcuts (editor) ──
     // Ctrl/Cmd+S     → save as draft
     // Ctrl/Cmd+Enter → publish
@@ -1426,8 +1499,9 @@ sudo -u#-1 /bin/bash
               '<input type="text" class="editor-input" id="ctf-machine" placeholder="e.g. Headless">' +
             '</div>' +
             '<div class="editor-group" style="grid-column:1/-1">' +
-              '<label>machine URL (optional)</label>' +
+              '<label>machine URL (optional) <span id="ctf-url-status" style="font-size:11px; color:var(--text-dim); margin-left:0.5rem;"></span></label>' +
               '<input type="text" class="editor-input" id="ctf-url" placeholder="https://app.hackthebox.com/machines/Headless">' +
+              '<img id="ctf-url-preview" style="display:none; max-width:200px; margin-top:0.5rem; border-radius:4px; border:1px solid rgba(0,255,140,0.25);">' +
             '</div>' +
             '<div class="editor-group">' +
               '<label>platform</label>' +
@@ -1487,6 +1561,48 @@ sudo -u#-1 /bin/bash
         '</div>';
       document.body.appendChild(modal);
 
+      // ── Auto-fetch og:image when URL pasted/blurred ──
+      var ctfUrlInput  = document.getElementById('ctf-url');
+      var ctfUrlStatus = document.getElementById('ctf-url-status');
+      var ctfUrlPreview = document.getElementById('ctf-url-preview');
+      var fetchedCoverImage = '';
+
+      function fetchCoverImage(url) {
+        if (!url || !/^https?:\/\//.test(url)) return;
+        ctfUrlStatus.textContent = 'fetching image…';
+        ctfUrlStatus.style.color = 'var(--text-dim)';
+        ctfUrlPreview.style.display = 'none';
+        // Use allorigins.win as a free CORS proxy
+        var proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+        fetch(proxy).then(function (r) { return r.json(); }).then(function (data) {
+          var html = data && data.contents ? data.contents : '';
+          // Match <meta property="og:image" content="...">, or twitter:image
+          var m = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+                  html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i) ||
+                  html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i);
+          if (m && m[1]) {
+            fetchedCoverImage = m[1];
+            ctfUrlStatus.textContent = '✓ image found';
+            ctfUrlStatus.style.color = 'var(--green, #00ff8c)';
+            ctfUrlPreview.src = m[1];
+            ctfUrlPreview.style.display = 'block';
+          } else {
+            fetchedCoverImage = '';
+            ctfUrlStatus.textContent = 'no image found on that page';
+            ctfUrlStatus.style.color = 'var(--text-dim)';
+          }
+        }).catch(function () {
+          fetchedCoverImage = '';
+          ctfUrlStatus.textContent = 'could not fetch image';
+          ctfUrlStatus.style.color = 'var(--text-dim)';
+        });
+      }
+
+      ctfUrlInput.addEventListener('blur', function () { fetchCoverImage(ctfUrlInput.value.trim()); });
+      ctfUrlInput.addEventListener('paste', function () {
+        setTimeout(function () { fetchCoverImage(ctfUrlInput.value.trim()); }, 50);
+      });
+
       document.getElementById('ctf-template-generate-btn').addEventListener('click', function () {
         var machine    = document.getElementById('ctf-machine').value.trim() || 'Machine Name';
         var platform   = document.getElementById('ctf-platform').value;
@@ -1497,11 +1613,13 @@ sudo -u#-1 /bin/bash
         var userFlag   = document.getElementById('ctf-user-flag').value.trim();
         var rootFlag   = document.getElementById('ctf-root-flag').value.trim();
         var tools      = document.getElementById('ctf-tools').value.trim();
+        var coverImage = fetchedCoverImage;
 
         var today = new Date().toISOString().split('T')[0];
         var toolList = tools ? tools.split(/\s+/).map(function(t) { return '- `' + t + '`'; }).join('\n') : '- `nmap`\n- `gobuster`';
 
         var template =
+(coverImage ? '![' + machine + '](' + coverImage + ')\n\n' : '') +
 '## 🖥️ Machine Info\n\n' +
 '| Field | Details |\n' +
 '|---|---|\n' +
@@ -1718,6 +1836,7 @@ toolList + '\n\n' +
     function handleImageFiles(files) {
       var count = 0;
       var total = files.length;
+      var storageAvailable = window.BensecDB && BensecDB.uploadImage && window.firebase && firebase.storage;
 
       files.forEach(function (file) {
         if (file.size > MAX_IMAGE_SIZE) {
@@ -1747,23 +1866,42 @@ toolList + '\n\n' +
             var ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, w, h);
 
-            // Compress as JPEG for photos, PNG for small/transparent images
-            var dataUrl;
-            if (file.type === 'image/png' && file.size < 200000) {
-              dataUrl = canvas.toDataURL('image/png');
-            } else {
-              dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+            var altText = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+            var useJpeg = !(file.type === 'image/png' && file.size < 200000);
+            var mime = useJpeg ? 'image/jpeg' : 'image/png';
+            var quality = useJpeg ? 0.82 : undefined;
+
+            function finishWithDataUrl() {
+              // Legacy fallback — base64 token (for offline/failed storage)
+              var dataUrl = canvas.toDataURL(mime, quality);
+              var imgToken = 'bensec_img_' + (++_imgCounter);
+              _imageCache[imgToken] = dataUrl;
+              insertTextAtCursor('\n![' + altText + '](' + imgToken + ')\n');
+              count++;
+              if (count === total) {
+                showToast(total === 1 ? 'Image inserted (local only)' : total + ' images inserted (local only)');
+                triggerAutosave();
+              }
             }
 
-            var altText = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-            var imgToken = 'bensec_img_' + (++_imgCounter);
-            _imageCache[imgToken] = dataUrl;
-            insertTextAtCursor('\n![' + altText + '](' + imgToken + ')\n');
-
-            count++;
-            if (count === total) {
-              showToast(total === 1 ? 'Image inserted' : total + ' images inserted');
-              triggerAutosave();
+            if (storageAvailable) {
+              canvas.toBlob(function (blob) {
+                if (!blob) { finishWithDataUrl(); return; }
+                showToast('Uploading ' + file.name + '…');
+                BensecDB.uploadImage(blob, file.name).then(function (url) {
+                  insertTextAtCursor('\n![' + altText + '](' + url + ')\n');
+                  count++;
+                  if (count === total) {
+                    showToast(total === 1 ? 'Image uploaded' : total + ' images uploaded');
+                    triggerAutosave();
+                  }
+                }).catch(function (err) {
+                  console.warn('Image upload failed, falling back to embed:', err);
+                  finishWithDataUrl();
+                });
+              }, mime, quality);
+            } else {
+              finishWithDataUrl();
             }
           };
           img.src = e.target.result;
@@ -2196,6 +2334,7 @@ toolList + '\n\n' +
     renderHeroStatus();
     renderPostsOnIndex();
     renderPostsOnBlog();
+    initBlogSearch();
     renderProjectsOnIndex();
     renderSinglePost();
 
