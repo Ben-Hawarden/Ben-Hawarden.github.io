@@ -105,6 +105,11 @@
         <!-- Action bar -->
         <div class="admin-toolbar">
           <button class="admin-btn success" id="new-post-btn">+ new post</button>
+          <div class="admin-filter-group" role="tablist" aria-label="Filter posts">
+            <button class="admin-filter-btn active" data-filter="all">all</button>
+            <button class="admin-filter-btn" data-filter="published">published</button>
+            <button class="admin-filter-btn" data-filter="draft">drafts</button>
+          </div>
           <div class="admin-search">
             <span class="search-prompt">$</span>
             <input type="text" id="admin-search" placeholder="search posts..." autocomplete="off">

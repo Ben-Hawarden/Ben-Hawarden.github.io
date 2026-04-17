@@ -565,6 +565,14 @@ sudo -u#-1 /bin/bash
         || (post.body    || '').toLowerCase().indexOf(q) !== -1;
   }
 
+  var activeBlogTag = '';
+
+  function postHasTag(post, tag) {
+    if (!tag) return true;
+    var tags = (post.tags || '').toLowerCase().split(/\s+/);
+    return tags.indexOf(tag.toLowerCase()) !== -1;
+  }
+
   function renderPostsOnBlog(searchQuery) {
     var ctfContainer   = document.getElementById('blog-ctf-posts');
     var notesContainer = document.getElementById('blog-notes-posts');
@@ -573,7 +581,8 @@ sudo -u#-1 /bin/bash
     var q = (searchQuery || '').trim();
     var posts = getPosts()
       .filter(function (p) { return p.status !== 'draft'; })
-      .filter(function (p) { return matchesSearch(p, q); });
+      .filter(function (p) { return matchesSearch(p, q); })
+      .filter(function (p) { return postHasTag(p, activeBlogTag); });
     posts.sort(function (a, b) { return b.date.localeCompare(a.date); });
 
     var ctfPosts   = posts.filter(isCTFPost);
@@ -609,6 +618,38 @@ sudo -u#-1 /bin/bash
 
     renderInto(ctfContainer,   ctfPosts,   'ctf-empty');
     renderInto(notesContainer, notesPosts, 'notes-empty');
+  }
+
+  // ── Tag filter chips on /blog ──
+  function renderBlogTagFilter() {
+    var container = document.getElementById('blog-tag-filter');
+    if (!container) return;
+    var counts = {};
+    getPosts().filter(function (p) { return p.status !== 'draft'; }).forEach(function (p) {
+      (p.tags || '').split(/\s+/).filter(Boolean).forEach(function (t) {
+        t = t.toLowerCase();
+        counts[t] = (counts[t] || 0) + 1;
+      });
+    });
+    var tags = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+    if (!tags.length) { container.innerHTML = ''; return; }
+
+    var searchInput = document.getElementById('blog-search');
+    container.innerHTML =
+      '<button class="blog-tag-chip' + (activeBlogTag === '' ? ' active' : '') + '" data-tag="">all</button>' +
+      tags.map(function (t) {
+        var active = activeBlogTag === t ? ' active' : '';
+        return '<button class="blog-tag-chip' + active + '" data-tag="' + escapeHtml(t) + '">' +
+               escapeHtml(t) + ' <span class="chip-count">' + counts[t] + '</span></button>';
+      }).join('');
+
+    container.querySelectorAll('.blog-tag-chip').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activeBlogTag = btn.dataset.tag || '';
+        renderBlogTagFilter();
+        renderPostsOnBlog(searchInput ? searchInput.value : '');
+      });
+    });
   }
 
   // ── Reader search wiring ──
@@ -1002,9 +1043,27 @@ sudo -u#-1 /bin/bash
       });
     }
 
+    // ── Status filter (all / published / draft) ──
+    var adminStatusFilter = 'all';
+    var filterBtns = document.querySelectorAll('.admin-filter-btn');
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        filterBtns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        adminStatusFilter = btn.dataset.filter;
+        renderAdminPosts();
+      });
+    });
+
     // ── Post list ──
     function renderAdminPosts() {
       var posts = getPosts().sort(function (a, b) { return b.date.localeCompare(a.date); });
+
+      if (adminStatusFilter === 'published') {
+        posts = posts.filter(function (p) { return p.status !== 'draft'; });
+      } else if (adminStatusFilter === 'draft') {
+        posts = posts.filter(function (p) { return p.status === 'draft'; });
+      }
 
       if (adminSearchQuery) {
         var q = adminSearchQuery.toLowerCase();
@@ -1015,8 +1074,9 @@ sudo -u#-1 /bin/bash
         });
       }
 
-      // No posts at all
-      if (posts.length === 0 && !adminSearchQuery) {
+      var hasAnyPosts = getPosts().length > 0;
+      // No posts at all anywhere
+      if (!hasAnyPosts) {
         postsList.innerHTML = '';
         emptyState.classList.remove('hidden');
         return;
@@ -1024,9 +1084,12 @@ sudo -u#-1 /bin/bash
 
       emptyState.classList.add('hidden');
 
-      // No search results
+      // No matching posts
       if (posts.length === 0) {
-        postsList.innerHTML = '<p class="dim" style="font-size:12px; padding:1rem;">No posts match "' + escapeHtml(adminSearchQuery) + '"</p>';
+        var msg = adminSearchQuery
+          ? 'No posts match "' + escapeHtml(adminSearchQuery) + '"'
+          : (adminStatusFilter === 'draft' ? 'No drafts.' : 'No published posts.');
+        postsList.innerHTML = '<p class="dim" style="font-size:12px; padding:1rem;">' + msg + '</p>';
         return;
       }
 
@@ -2334,6 +2397,7 @@ toolList + '\n\n' +
     renderHeroStatus();
     renderPostsOnIndex();
     renderPostsOnBlog();
+    renderBlogTagFilter();
     initBlogSearch();
     renderProjectsOnIndex();
     renderSinglePost();
