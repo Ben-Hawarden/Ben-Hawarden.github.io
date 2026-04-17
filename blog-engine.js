@@ -754,7 +754,7 @@ sudo -u#-1 /bin/bash
     }
 
     // ── Auth state — Firebase handles session persistence ──
-    if (window.BensecDB) {
+    if (window.BensecDB && BensecDB.isReady()) {
       BensecDB.onAuthChange(function (user) {
         if (user) {
           loginScreen.classList.add('hidden');
@@ -766,12 +766,21 @@ sudo -u#-1 /bin/bash
           dashboard.classList.add('hidden');
         }
       });
+    } else {
+      // Firebase failed to init — show a useful error on the login screen
+      loginError.textContent = 'Firebase failed to load — check your internet connection or open from the deployed URL.';
+      loginError.classList.remove('hidden');
     }
 
     // ── Login ──
     loginBtn.addEventListener('click', function () {
       var pw = passwordInput.value;
       if (!pw) return;
+      if (!window.BensecDB || !BensecDB.isReady()) {
+        loginError.textContent = 'Firebase is not ready. Open from https://ben-hawarden-blog.web.app/admin.html';
+        loginError.classList.remove('hidden');
+        return;
+      }
       loginBtn.disabled = true;
       loginBtn.textContent = 'authenticating...';
       BensecDB.login(pw).then(function () {
@@ -780,7 +789,18 @@ sudo -u#-1 /bin/bash
       }).catch(function (err) {
         loginBtn.disabled = false;
         loginBtn.textContent = 'authenticate';
-        loginError.textContent = 'access denied — invalid password';
+        var code = err && err.code;
+        var msg = 'access denied — invalid password';
+        if (code === 'auth/user-not-found' || code === 'auth/invalid-email') {
+          msg = 'error — no account found for ' + ADMIN_EMAIL;
+        } else if (code === 'auth/unauthorized-domain') {
+          msg = 'error — open from the deployed URL, not a local file';
+        } else if (code === 'auth/network-request-failed') {
+          msg = 'error — no internet connection';
+        } else if (code === 'auth/too-many-requests') {
+          msg = 'error — too many attempts, try again later';
+        }
+        loginError.textContent = msg;
         loginError.classList.remove('hidden');
         passwordInput.value = '';
         passwordInput.focus();
