@@ -136,20 +136,6 @@ var BensecDB = (function () {
     });
   }
 
-  // ── Storage (images) ──
-  function uploadImage(blob, filename) {
-    if (!_ready || !window.firebase || !firebase.storage) {
-      return Promise.reject(new Error('Firebase Storage not available'));
-    }
-    var storage = firebase.storage();
-    var safeName = (filename || 'image').replace(/[^a-zA-Z0-9._-]/g, '_');
-    var path = 'post-images/' + Date.now() + '_' + safeName;
-    var ref = storage.ref(path);
-    return ref.put(blob).then(function (snap) {
-      return snap.ref.getDownloadURL();
-    });
-  }
-
   // ── Auth ──
   function login(password) {
     if (!_ready || !window.ADMIN_EMAIL) return Promise.reject(new Error('Firebase not ready'));
@@ -184,7 +170,6 @@ var BensecDB = (function () {
     clearStatus:  clearStatus,
     login:        login,
     logout:       logout,
-    onAuthChange: onAuthChange,
-    uploadImage:  uploadImage
+    onAuthChange: onAuthChange
   };
 }());

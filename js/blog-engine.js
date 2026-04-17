@@ -1785,9 +1785,17 @@ toolList + '\n\n' +
       modal.innerHTML =
         '<div class="image-url-modal-content">' +
           '<h3>🔗 Insert image from URL</h3>' +
+          '<div class="gh-image-tip">' +
+            '<strong>💡 Tip — free image hosting via GitHub:</strong>' +
+            '<ol>' +
+              '<li>Open <a href="https://github.com/Ben-Hawarden/Ben-Hawarden.github.io/issues/new" target="_blank" rel="noopener">a new GitHub issue</a> (you don\'t have to submit it)</li>' +
+              '<li>Drag/paste your image into the comment box — GitHub uploads it and gives you a URL like <code>github.com/user-attachments/assets/…</code></li>' +
+              '<li>Copy that URL and paste it below. Close the issue tab without submitting.</li>' +
+            '</ol>' +
+          '</div>' +
           '<div class="editor-group">' +
             '<label>image URL</label>' +
-            '<input type="text" class="editor-input" id="image-url-input" placeholder="https://example.com/image.png">' +
+            '<input type="text" class="editor-input" id="image-url-input" placeholder="https://github.com/user-attachments/assets/...">' +
           '</div>' +
           '<div class="editor-group">' +
             '<label>alt text (optional)</label>' +
@@ -1899,7 +1907,6 @@ toolList + '\n\n' +
     function handleImageFiles(files) {
       var count = 0;
       var total = files.length;
-      var storageAvailable = window.BensecDB && BensecDB.uploadImage && window.firebase && firebase.storage;
 
       files.forEach(function (file) {
         if (file.size > MAX_IMAGE_SIZE) {
@@ -1929,42 +1936,23 @@ toolList + '\n\n' +
             var ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, w, h);
 
-            var altText = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-            var useJpeg = !(file.type === 'image/png' && file.size < 200000);
-            var mime = useJpeg ? 'image/jpeg' : 'image/png';
-            var quality = useJpeg ? 0.82 : undefined;
-
-            function finishWithDataUrl() {
-              // Legacy fallback — base64 token (for offline/failed storage)
-              var dataUrl = canvas.toDataURL(mime, quality);
-              var imgToken = 'bensec_img_' + (++_imgCounter);
-              _imageCache[imgToken] = dataUrl;
-              insertTextAtCursor('\n![' + altText + '](' + imgToken + ')\n');
-              count++;
-              if (count === total) {
-                showToast(total === 1 ? 'Image inserted (local only)' : total + ' images inserted (local only)');
-                triggerAutosave();
-              }
+            // Compress as JPEG for photos, PNG for small/transparent
+            var dataUrl;
+            if (file.type === 'image/png' && file.size < 200000) {
+              dataUrl = canvas.toDataURL('image/png');
+            } else {
+              dataUrl = canvas.toDataURL('image/jpeg', 0.82);
             }
 
-            if (storageAvailable) {
-              canvas.toBlob(function (blob) {
-                if (!blob) { finishWithDataUrl(); return; }
-                showToast('Uploading ' + file.name + '…');
-                BensecDB.uploadImage(blob, file.name).then(function (url) {
-                  insertTextAtCursor('\n![' + altText + '](' + url + ')\n');
-                  count++;
-                  if (count === total) {
-                    showToast(total === 1 ? 'Image uploaded' : total + ' images uploaded');
-                    triggerAutosave();
-                  }
-                }).catch(function (err) {
-                  console.warn('Image upload failed, falling back to embed:', err);
-                  finishWithDataUrl();
-                });
-              }, mime, quality);
-            } else {
-              finishWithDataUrl();
+            var altText = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+            var imgToken = 'bensec_img_' + (++_imgCounter);
+            _imageCache[imgToken] = dataUrl;
+            insertTextAtCursor('\n![' + altText + '](' + imgToken + ')\n');
+
+            count++;
+            if (count === total) {
+              showToast(total === 1 ? 'Image embedded' : total + ' images embedded');
+              triggerAutosave();
             }
           };
           img.src = e.target.result;

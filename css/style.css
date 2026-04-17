@@ -2484,3 +2484,25 @@ textarea.editor-input {
   font-size: 10px;
   margin-left: 3px;
 }
+
+/* GitHub image hosting tip inside image URL modal */
+.gh-image-tip {
+  background: rgba(0, 255, 140, 0.06);
+  border: 1px solid rgba(0, 255, 140, 0.25);
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.gh-image-tip strong { color: var(--green, #00ff8c); display: block; margin-bottom: 0.4rem; }
+.gh-image-tip ol { margin: 0 0 0 1.1rem; padding: 0; }
+.gh-image-tip li { margin: 0.15rem 0; }
+.gh-image-tip a { color: var(--green, #00ff8c); text-decoration: underline; }
+.gh-image-tip code {
+  background: rgba(0, 255, 140, 0.1);
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-size: 11px;
+}
