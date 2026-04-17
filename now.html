@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achievements | bhsec</title>
+  <meta name="description" content="Ben Hawarden's certifications, achievements, and CTF stats in cyber security.">
+  <meta property="og:title" content="Achievements | bhsec">
+  <meta property="og:description" content="Certifications, achievements, and CTF stats.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="now.html" class="active-link">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="page-title reveal">
+    <h1>achievements</h1>
+    <p>Certifications, stats, and milestones. Last updated: <span class="accent">2026-04-16</span></p>
+  </div>
+
+  <section class="section">
+
+    <!-- Certifications -->
+    <div class="category reveal">
+      <h3 class="category-title">certifications</h3>
+      <div class="cert-timeline">
+
+        <div class="cert-item">
+          <span class="cert-status progress">in progress</span>
+          <div class="cert-info">
+            <h3>CompTIA Security+</h3>
+            <p class="dim">SY0-701 · CompTIA</p>
+          </div>
+          <span class="cert-badge-icon">⚙️</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TryHackMe Stats -->
+    <div class="category reveal">
+      <h3 class="category-title">tryhackme stats</h3>
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-value">Top 2%</span>
+          <span class="stat-label">Global Rank</span>
+          <div class="stat-bar" style="--bar-width: 98%; --bar-color: var(--green);"></div>
+        </div>
+        <div class="stat">
+          <span class="stat-value">40,089</span>
+          <span class="stat-label">Points</span>
+          <div class="stat-bar" style="--bar-width: 80%; --bar-color: var(--amber);"></div>
+        </div>
+        <div class="stat">
+          <span class="stat-value">142</span>
+          <span class="stat-label">Rooms</span>
+          <div class="stat-bar" style="--bar-width: 71%; --bar-color: var(--cyan);"></div>
+        </div>
+        <div class="stat">
+          <span class="stat-value">16</span>
+          <span class="stat-label">Badges</span>
+          <div class="stat-bar" style="--bar-width: 55%; --bar-color: var(--rose);"></div>
+        </div>
+        <div class="stat">
+          <span class="stat-value">0xC</span>
+          <span class="stat-label">Level</span>
+          <div class="stat-bar" style="--bar-width: 85%; --bar-color: var(--accent);"></div>
+        </div>
+        <div class="stat">
+          <span class="stat-value">GURU</span>
+          <span class="stat-label">Title</span>
+          <div class="stat-bar" style="--bar-width: 100%; --bar-color: var(--green);"></div>
+        </div>
+      </div>
+      <div class="stats-links" style="margin-top: 1rem;">
+        <a href="https://tryhackme.com/p/VpnBenny" target="_blank" rel="noopener" class="profile-link">
+          <span class="btn-icon">></span> view tryhackme profile
+        </a>
+      </div>
+    </div>
+
+    <!-- Key milestones -->
+    <div class="category reveal">
+      <h3 class="category-title">milestones</h3>
+      <div class="cert-timeline">
+
+        <div class="cert-item">
+          <span class="cert-status earned">2025</span>
+          <div class="cert-info">
+            <h3>TryHackMe — Top 2% Global</h3>
+            <p class="dim">GURU rank · 40,089 points · 142 rooms completed</p>
+          </div>
+          <span class="cert-badge-icon">🏆</span>
+        </div>
+
+
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="index.html">home</a>
+      </div>
+    </div>
+  </footer>  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-db.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>

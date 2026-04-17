@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Ben Hawarden</title>
+  <meta name="description" content="CTF writeups, security notes, and things I've learned.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html" class="active-link">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="now.html">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="page-title reveal">
+    <h1>blog</h1>
+    <p>CTF writeups, security notes, and things I've learned along the way.</p>
+  </div>
+
+  <!-- Section tabs -->
+  <div class="blog-tabs" id="blog-tabs">
+    <button class="blog-tab-btn active" data-section="all">all</button>
+    <button class="blog-tab-btn" data-section="ctf">🚩 ctf writeups</button>
+    <button class="blog-tab-btn" data-section="notes">📝 notes &amp; learnings</button>
+  </div>
+
+  <!-- CTF Writeups -->
+  <section class="section blog-section" id="section-ctf">
+    <div class="section-header">
+      <p class="section-label">// ctf writeups</p>
+      <div class="section-line"></div>
+    </div>
+    <div id="blog-ctf-posts">
+      <!-- placeholder -->
+      <div class="post reveal" data-tags="walkthrough ctf htb">
+        <span class="post-date">2026-04-08</span>
+        <h3><a href="post-template.html">HTB Walkthrough: Headless</a></h3>
+        <p>Step-by-step walkthrough of the Headless box on Hack The Box — XSS to RCE via blind injection.</p>
+        <div class="post-tags">
+          <span class="tag">walkthrough</span>
+          <span class="tag">htb</span>
+          <span class="tag">easy</span>
+        </div>
+      </div>
+    </div>
+    <p class="blog-empty hidden" id="ctf-empty">No CTF writeups yet.</p>
+  </section>
+
+  <!-- Notes & Learnings -->
+  <section class="section blog-section" id="section-notes">
+    <div class="section-header">
+      <p class="section-label">// notes &amp; learnings</p>
+      <div class="section-line"></div>
+    </div>
+    <div id="blog-notes-posts">
+      <!-- placeholder -->
+      <div class="post reveal" data-tags="guide bugbounty">
+        <span class="post-date">2026-03-25</span>
+        <h3><a href="#">Getting Started with Bug Bounties</a></h3>
+        <p>A beginner-friendly guide to finding your first vulnerability and navigating bug bounty platforms.</p>
+        <div class="post-tags">
+          <span class="tag">guide</span>
+          <span class="tag">bugbounty</span>
+        </div>
+      </div>
+    </div>
+    <p class="blog-empty hidden" id="notes-empty">No notes yet.</p>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="admin.html">admin</a>
+      </div>
+    </div>
+  </footer>  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-db.js"></script>
+
+  <script src="script.js"></script>
+  <script src="blog-engine.js"></script>
+  <script>
+    // Tab switching
+    document.querySelectorAll('.blog-tab-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.blog-tab-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var section = btn.dataset.section;
+        document.querySelectorAll('.blog-section').forEach(function (s) {
+          if (section === 'all') {
+            s.style.display = '';
+          } else {
+            s.style.display = s.id === 'section-' + section ? '' : 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | bensec</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="now.html">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Login screen -->
+  <div id="login-screen" class="admin-login">
+    <div class="admin-login-card">
+      <div class="admin-login-icon">🔒</div>
+      <h1>admin panel</h1>
+      <p>Authenticate to manage your blog posts.</p>
+      <div class="admin-field">
+        <label>$</label>
+        <input type="password" id="admin-password" placeholder="enter password..." autocomplete="off">
+      </div>
+      <button class="admin-btn" id="login-btn">authenticate</button>
+      <p class="admin-error hidden" id="login-error">access denied — invalid password</p>
+      <div class="login-security-note">
+        <span class="login-lock-icon">🔒</span>
+        <span>Locks for 15 min after 5 failed attempts.</span>
+      </div>
+      <p class="dim" style="margin-top:1rem; font-size:11px;">First time? Default password is: <code class="accent">admin</code><br>Change it after first login.</p>
+    </div>
+  </div>
+
+  <!-- Dashboard (hidden until login) -->
+  <div id="admin-dashboard" class="admin-container hidden">
+    <div class="admin-dashboard">
+
+      <!-- Top bar -->
+      <div class="admin-topbar">
+        <div class="admin-topbar-left">
+          <h2><span style="color:var(--green);">$</span> dashboard</h2>
+          <div class="admin-stats" id="admin-stats"></div>
+        </div>
+        <div class="admin-topbar-right">
+          <button class="admin-btn" id="export-btn" title="Export all data as JSON">⬇ export</button>
+          <label class="admin-btn" id="import-label" title="Import data from JSON" style="cursor:pointer;">⬆ import<input type="file" id="import-file" accept=".json" style="display:none;"></label>
+          <button class="admin-btn" id="change-pw-btn" title="Change password">🔑 password</button>
+          <button class="admin-btn danger" id="logout-btn">logout</button>
+        </div>
+      </div>
+
+      <!-- Change password form (hidden) -->
+      <div id="change-pw-form" class="admin-pw-form hidden">
+        <div class="admin-field" style="max-width:380px;">
+          <label>new:</label>
+          <input type="password" id="new-password" placeholder="new password">
+        </div>
+        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+          <button class="admin-btn success" id="save-pw-btn">save</button>
+          <button class="admin-btn" id="cancel-pw-btn">cancel</button>
+        </div>
+      </div>
+
+      <!-- Hero status editor -->
+      <div class="admin-status-bar">
+        <span class="admin-status-label">🟢 homepage status:</span>
+        <select class="editor-input" id="status-label-select" style="width:160px; padding:0.3rem 0.5rem; font-size:12px;">
+          <option value="just hacked">just hacked</option>
+          <option value="currently hacking on">currently hacking on</option>
+          <option value="recently completed">recently completed</option>
+          <option value="working on">working on</option>
+        </select>
+        <input type="text" id="status-text-input" class="editor-input" placeholder="HTB — Headless" style="flex:1; min-width:160px; padding:0.3rem 0.6rem; font-size:12px;">
+        <button class="admin-btn success" id="save-status-btn" style="padding:0.3rem 0.8rem; font-size:12px;">save</button>
+        <button class="admin-btn" id="clear-status-btn" style="padding:0.3rem 0.8rem; font-size:12px;">clear</button>
+      </div>
+
+      <!-- Dashboard tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" id="tab-posts">📝 Posts</button>
+        <button class="admin-tab-btn" id="tab-projects">📁 Projects</button>
+        <button class="admin-tab-btn" id="tab-cheatsheets">📋 Cheatsheets</button>
+      </div>
+
+      <!-- Posts panel -->
+      <div id="posts-panel">
+        <!-- Action bar -->
+        <div class="admin-toolbar">
+          <button class="admin-btn success" id="new-post-btn">+ new post</button>
+          <div class="admin-search">
+            <span class="search-prompt">$</span>
+            <input type="text" id="admin-search" placeholder="search posts..." autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Post list -->
+        <div id="posts-list" class="admin-posts-list"></div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="admin-empty hidden">
+          <div class="admin-empty-icon">📝</div>
+          <h3>No posts yet</h3>
+          <p>Click "+ new post" above to write your first blog post.</p>
+        </div>
+      </div>
+
+      <!-- Projects panel -->
+      <div id="projects-panel" class="hidden">
+        <div class="admin-toolbar">
+          <button class="admin-btn success" id="new-project-btn">+ new project</button>
+        </div>
+        <div id="projects-admin-list" class="admin-posts-list"></div>
+        <div id="projects-empty-state" class="admin-empty hidden">
+          <div class="admin-empty-icon">📁</div>
+          <h3>No projects yet</h3>
+          <p>Click "+ new project" to add your first project.</p>
+        </div>
+      </div>
+
+      <!-- Cheatsheets panel -->
+      <div id="cheatsheets-panel" class="hidden">
+        <div class="admin-toolbar">
+          <button class="admin-btn success" id="new-cs-section-btn">+ new section</button>
+          <p class="dim" style="font-size:12px; margin:0;">Changes save instantly and appear live on the cheatsheets page.</p>
+        </div>
+        <div id="cs-sections-list"></div>
+        <div id="cs-empty-state" class="admin-empty hidden">
+          <div class="admin-empty-icon">📋</div>
+          <h3>No cheatsheet sections</h3>
+          <p>Click "+ new section" to create your first cheatsheet category.</p>
+        </div>
+      </div>
+
+      <!-- Post editor (hidden) -->
+      <div id="post-editor" class="hidden">
+        <div class="editor-header">
+          <h3 id="editor-heading">New post</h3>
+          <div class="editor-header-actions">
+            <span class="editor-autosave-status" id="autosave-status"></span>
+            <button class="admin-btn" id="cancel-post-btn">back to posts</button>
+          </div>
+        </div>
+
+        <div class="editor-layout">
+          <div class="editor-main">
+            <div class="editor-group">
+              <label>title</label>
+              <input type="text" class="editor-input" id="editor-title" placeholder="Post title...">
+            </div>
+
+            <div class="editor-row">
+              <div class="editor-group" style="flex:1;">
+                <label>date</label>
+                <input type="date" class="editor-input" id="editor-date">
+              </div>
+              <div class="editor-group" style="flex:1;">
+                <label>status</label>
+                <select class="editor-input" id="editor-status">
+                  <option value="published">Published</option>
+                  <option value="draft">Draft</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="editor-group">
+              <label>tags (space separated)</label>
+              <input type="text" class="editor-input" id="editor-tags" placeholder="walkthrough ctf htb">
+              <div class="tag-suggestions" id="tag-suggestions"></div>
+            </div>
+
+            <div class="editor-group">
+              <label>summary</label>
+              <input type="text" class="editor-input" id="editor-summary" placeholder="One-line description for the blog listing...">
+              <p class="editor-help" id="summary-count">0 / 160 characters</p>
+            </div>
+
+            <div class="editor-group">
+              <div class="editor-tabs">
+                <button class="editor-tab active" data-tab="write">write</button>
+                <button class="editor-tab" data-tab="preview">preview</button>
+              </div>
+              <div id="write-panel">
+                <div class="editor-toolbar">
+                  <span class="toolbar-label">templates:</span>
+                  <button type="button" class="toolbar-btn" id="template-ctf-btn" title="CTF writeup template">🚩 CTF writeup</button>
+                  <span class="toolbar-sep">|</span>
+                  <span class="toolbar-label">insert:</span>
+                  <button type="button" class="toolbar-btn" id="insert-image-btn" title="Upload image">🖼️ image</button>
+                  <button type="button" class="toolbar-btn" id="insert-url-image-btn" title="Insert image from URL">🔗 image URL</button>
+                  <input type="file" id="image-upload" accept="image/*" multiple style="display:none;">
+                </div>
+                <div class="editor-dropzone hidden" id="editor-dropzone">
+                  <div class="dropzone-content">
+                    <span class="dropzone-icon">📁</span>
+                    <p>Drop images here</p>
+                    <p class="dim" style="font-size:11px;">PNG, JPG, GIF, WebP — max 2MB each</p>
+                  </div>
+                </div>
+                <textarea class="editor-input" id="editor-body" placeholder="Write your post in markdown...
+
+# Heading 1
+## Heading 2
+### Heading 3
+
+**bold** and *italic*
+
+- list item
+- another item
+
+> blockquote
+
+`inline code`
+
+```
+code block
+```
+
+[link text](url)
+![alt text](image-url)"></textarea>
+                <div class="editor-footer-bar">
+                  <p class="editor-help">Supports: # headings, **bold**, *italic*, `code`, ```code blocks```, > quotes, - lists, [links](url), ![images](url)</p>
+                  <span class="editor-word-count" id="word-count">0 words</span>
+                </div>
+              </div>
+              <div id="preview-panel" class="editor-preview hidden"></div>
+            </div>
+
+            <div class="editor-actions">
+              <button class="admin-btn success" id="save-post-btn">publish post</button>
+              <button class="admin-btn" id="save-draft-btn">save as draft</button>
+              <button class="admin-btn danger" id="delete-from-editor-btn" style="margin-left:auto;">delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete confirmation modal -->
+      <div id="delete-modal" class="admin-modal hidden">
+        <div class="admin-modal-content">
+          <h3>Delete post?</h3>
+          <p id="delete-modal-title"></p>
+          <div class="admin-modal-actions">
+            <button class="admin-btn danger" id="confirm-delete-btn">delete</button>
+            <button class="admin-btn" id="cancel-delete-btn">cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="index.html">home</a>
+      </div>
+    </div>
+  </footer>  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-db.js"></script>
+
+  <script src="script.js"></script>
+  <script src="blog-engine.js"></script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resources | bensec</title>
+  <meta name="description" content="Curated list of cyber security platforms, training labs, CTF sites, and tools used by Ben.">
+  <meta property="og:title" content="Resources | bensec">
+  <meta property="og:description" content="Curated list of cyber security platforms, training labs, CTF sites, and tools.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html">blog</a></li>
+        <li><a href="resources.html" class="active-link">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="now.html">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="page-title reveal">
+    <h1>resources</h1>
+    <p>Platforms I train on and tools I use.</p>
+  </div>
+
+  <section class="section">
+    <div class="section-header">
+      <p class="section-label">// training &amp; labs</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="tools-grid reveal">
+      <a href="https://tryhackme.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🎯</span>
+        <span class="tool-name">TryHackMe</span>
+        <span class="tool-desc">Guided rooms</span>
+      </a>
+      <a href="https://www.hackthebox.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">📦</span>
+        <span class="tool-name">Hack The Box</span>
+        <span class="tool-desc">Hacking labs</span>
+      </a>
+      <a href="https://portswigger.net/web-security" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🌐</span>
+        <span class="tool-name">PortSwigger</span>
+        <span class="tool-desc">Web security</span>
+      </a>
+      <a href="https://www.offensive-security.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🗡️</span>
+        <span class="tool-name">OffSec</span>
+        <span class="tool-desc">OSCP / certs</span>
+      </a>
+      <a href="https://academy.hackthebox.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🎓</span>
+        <span class="tool-name">HTB Academy</span>
+        <span class="tool-desc">Structured courses</span>
+      </a>
+      <a href="https://www.sans.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🏛️</span>
+        <span class="tool-name">SANS Institute</span>
+        <span class="tool-desc">GIAC certs</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <p class="section-label">// ctf &amp; wargames</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="tools-grid reveal">
+      <a href="https://ctftime.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🏁</span>
+        <span class="tool-name">CTFtime</span>
+        <span class="tool-desc">Competition calendar</span>
+      </a>
+      <a href="https://overthewire.org/wargames/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">⚔️</span>
+        <span class="tool-name">OverTheWire</span>
+        <span class="tool-desc">Wargames</span>
+      </a>
+      <a href="https://picoctf.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🧩</span>
+        <span class="tool-name">picoCTF</span>
+        <span class="tool-desc">Beginner CTF</span>
+      </a>
+      <a href="https://cryptohack.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🔐</span>
+        <span class="tool-name">CryptoHack</span>
+        <span class="tool-desc">Cryptography</span>
+      </a>
+      <a href="https://www.vulnhub.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">💾</span>
+        <span class="tool-name">VulnHub</span>
+        <span class="tool-desc">Vulnerable VMs</span>
+      </a>
+      <a href="https://crackmes.one/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🔧</span>
+        <span class="tool-name">Crackmes</span>
+        <span class="tool-desc">Reversing challenges</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <p class="section-label">// bug bounty</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="tools-grid reveal">
+      <a href="https://hackerone.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🐞</span>
+        <span class="tool-name">HackerOne</span>
+        <span class="tool-desc">Bug bounty</span>
+      </a>
+      <a href="https://www.bugcrowd.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🐛</span>
+        <span class="tool-name">Bugcrowd</span>
+        <span class="tool-desc">Crowdsourced testing</span>
+      </a>
+      <a href="https://www.intigriti.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🔎</span>
+        <span class="tool-name">Intigriti</span>
+        <span class="tool-desc">EU bug bounty</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <p class="section-label">// news &amp; intel</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="tools-grid reveal">
+      <a href="https://thehackernews.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">📰</span>
+        <span class="tool-name">The Hacker News</span>
+        <span class="tool-desc">Daily security news</span>
+      </a>
+      <a href="https://www.bleepingcomputer.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">💻</span>
+        <span class="tool-name">BleepingComputer</span>
+        <span class="tool-desc">Malware coverage</span>
+      </a>
+      <a href="https://cve.mitre.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🛡️</span>
+        <span class="tool-name">MITRE CVE</span>
+        <span class="tool-desc">Vuln database</span>
+      </a>
+      <a href="https://attack.mitre.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🗺️</span>
+        <span class="tool-name">MITRE ATT&amp;CK</span>
+        <span class="tool-desc">Adversary tactics</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <p class="section-label">// tools</p>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="tools-grid reveal">
+      <a href="https://nmap.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">📡</span>
+        <span class="tool-name">Nmap</span>
+        <span class="tool-desc">Port scanner</span>
+      </a>
+      <a href="https://portswigger.net/burp" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🔥</span>
+        <span class="tool-name">Burp Suite</span>
+        <span class="tool-desc">Web proxy</span>
+      </a>
+      <a href="https://www.metasploit.com/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">💀</span>
+        <span class="tool-name">Metasploit</span>
+        <span class="tool-desc">Exploitation</span>
+      </a>
+      <a href="https://github.com/ffuf/ffuf" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🌀</span>
+        <span class="tool-name">ffuf</span>
+        <span class="tool-desc">Web fuzzer</span>
+      </a>
+      <a href="https://github.com/OJ/gobuster" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🚪</span>
+        <span class="tool-name">Gobuster</span>
+        <span class="tool-desc">Dir brute-force</span>
+      </a>
+      <a href="https://sqlmap.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">💉</span>
+        <span class="tool-name">sqlmap</span>
+        <span class="tool-desc">SQL injection</span>
+      </a>
+      <a href="https://hashcat.net/hashcat/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🐱</span>
+        <span class="tool-name">Hashcat</span>
+        <span class="tool-desc">Password cracking</span>
+      </a>
+      <a href="https://www.openwall.com/john/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🔨</span>
+        <span class="tool-name">John the Ripper</span>
+        <span class="tool-desc">Password cracker</span>
+      </a>
+      <a href="https://github.com/vanhauser-thc/thc-hydra" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🐉</span>
+        <span class="tool-name">Hydra</span>
+        <span class="tool-desc">Login brute-force</span>
+      </a>
+      <a href="https://ghidra-sre.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">👻</span>
+        <span class="tool-name">Ghidra</span>
+        <span class="tool-desc">Reversing</span>
+      </a>
+      <a href="https://www.wireshark.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🦈</span>
+        <span class="tool-name">Wireshark</span>
+        <span class="tool-desc">Packet analysis</span>
+      </a>
+      <a href="https://github.com/fortra/impacket" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🐍</span>
+        <span class="tool-name">Impacket</span>
+        <span class="tool-desc">Network protocols</span>
+      </a>
+      <a href="https://github.com/peass-ng/PEASS-ng" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🚀</span>
+        <span class="tool-name">LinPEAS/WinPEAS</span>
+        <span class="tool-desc">PrivEsc scripts</span>
+      </a>
+      <a href="https://www.shodan.io/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">👁️</span>
+        <span class="tool-name">Shodan</span>
+        <span class="tool-desc">Device search</span>
+      </a>
+      <a href="https://github.com/carlospolop/hacktricks" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">📖</span>
+        <span class="tool-name">HackTricks</span>
+        <span class="tool-desc">Hacking wiki</span>
+      </a>
+      <a href="https://www.volatilityfoundation.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🧪</span>
+        <span class="tool-name">Volatility</span>
+        <span class="tool-desc">Memory forensics</span>
+      </a>
+      <a href="https://www.kali.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">🐧</span>
+        <span class="tool-name">Kali Linux</span>
+        <span class="tool-desc">Pentest OS</span>
+      </a>
+      <a href="https://www.zaproxy.org/" target="_blank" rel="noopener" class="tool-card">
+        <span class="tool-icon">⚡</span>
+        <span class="tool-name">OWASP ZAP</span>
+        <span class="tool-desc">Web scanner</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="admin.html">admin</a>
+      </div>
+    </div>
+  </footer>  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-db.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>

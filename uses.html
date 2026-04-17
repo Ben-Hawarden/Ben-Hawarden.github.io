@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/uses | bensec</title>
+  <meta name="description" content="Hardware, software, and tools Ben uses for cyber security work and daily computing.">
+  <meta property="og:title" content="/uses | bensec">
+  <meta property="og:description" content="Hardware, software, and tools used for cyber security work.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#blog">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="uses.html" class="active-link">uses</a></li>
+        <li><a href="now.html">achievements</a></li>
+        <li><a href="index.html#contact">contact</a></li>
+        <li><button class="theme-toggle" aria-label="Toggle theme">◐</button></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="theme-toggle" aria-label="Toggle theme">◐</button>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="page-title reveal">
+    <h1>/uses</h1>
+    <p>What I use day to day for security work, development, and general computing.</p>
+  </div>
+
+  <section class="section">
+    <div class="category reveal">
+      <h3 class="category-title">hardware</h3>
+      <ul class="uses-list">
+        <li><span class="li-icon">💻</span> <strong>Laptop</strong> — ThinkPad X1 Carbon (main machine)</li>
+        <li><span class="li-icon">🖥️</span> <strong>Desktop</strong> — Custom build, Ryzen 7, 32GB RAM, RTX 3070 (for hashcat)</li>
+        <li><span class="li-icon">🖵</span> <strong>Monitor</strong> — 27" 1440p IPS</li>
+        <li><span class="li-icon">⌨️</span> <strong>Keyboard</strong> — Keychron K2 (Brown switches)</li>
+        <li><span class="li-icon">🖱️</span> <strong>Mouse</strong> — Logitech G Pro</li>
+      </ul>
+    </div>
+
+    <div class="category reveal">
+      <h3 class="category-title">operating systems</h3>
+      <ul class="uses-list">
+        <li><span class="li-icon">🪟</span> <strong>Daily driver</strong> — Windows 11 + WSL2 (Ubuntu)</li>
+        <li><span class="li-icon">🐧</span> <strong>Pentesting</strong> — Kali Linux (VM via VMware)</li>
+        <li><span class="li-icon">🧬</span> <strong>Malware analysis</strong> — REMnux + FlareVM (isolated VMs)</li>
+        <li><span class="li-icon">🔒</span> <strong>Privacy</strong> — Whonix (when needed)</li>
+      </ul>
+    </div>
+
+    <div class="category reveal">
+      <h3 class="category-title">editor &amp; terminal</h3>
+      <ul class="uses-list">
+        <li><span class="li-icon">📝</span> <strong>Editor</strong> — VS Code with vim keybindings</li>
+        <li><span class="li-icon">🖥️</span> <strong>Terminal</strong> — Windows Terminal + tmux in WSL</li>
+        <li><span class="li-icon">🐚</span> <strong>Shell</strong> — zsh + oh-my-zsh</li>
+        <li><span class="li-icon">🔤</span> <strong>Font</strong> — JetBrains Mono</li>
+      </ul>
+    </div>
+
+    <div class="category reveal">
+      <h3 class="category-title">security tools</h3>
+      <ul class="uses-list">
+        <li><span class="li-icon">🔥</span> <strong>Web testing</strong> — Burp Suite Pro, OWASP ZAP</li>
+        <li><span class="li-icon">📡</span> <strong>Scanning</strong> — Nmap, Rustscan, Masscan</li>
+        <li><span class="li-icon">💀</span> <strong>Exploitation</strong> — Metasploit, Impacket, CrackMapExec</li>
+        <li><span class="li-icon">🔑</span> <strong>Password</strong> — Hashcat, John the Ripper</li>
+        <li><span class="li-icon">👻</span> <strong>Reversing</strong> — Ghidra, x64dbg, Wireshark</li>
+        <li><span class="li-icon">🔍</span> <strong>Recon</strong> — Amass, Subfinder, httpx</li>
+      </ul>
+    </div>
+
+    <div class="category reveal">
+      <h3 class="category-title">software</h3>
+      <ul class="uses-list">
+        <li><span class="li-icon">🦊</span> <strong>Browser</strong> — Firefox (with uBlock Origin, FoxyProxy)</li>
+        <li><span class="li-icon">💎</span> <strong>Notes</strong> — Obsidian (linked CTF notes + write-ups)</li>
+        <li><span class="li-icon">🔐</span> <strong>Password manager</strong> — KeePassXC</li>
+        <li><span class="li-icon">🛡️</span> <strong>VPN</strong> — WireGuard</li>
+        <li><span class="li-icon">📦</span> <strong>Virtualisation</strong> — VMware Workstation Pro</li>
+        <li><span class="li-icon">🌿</span> <strong>Git</strong> — Lazygit in terminal</li>
+      </ul>
+    </div>
+
+    <div class="category reveal">
+      <h3 class="category-title">dotfiles</h3>
+      <p class="dim">My configs are on GitHub: <a href="#">github.com/ben/dotfiles</a></p>
+    </div>
+  </section>
+
+  <section class="section" id="toolbox">
+    <div class="section-header">
+      <p class="section-label">// toolbox</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="tools-grid reveal">
+      <div class="tool-card">
+        <span class="tool-icon">🔥</span>
+        <span class="tool-name">Burp Suite</span>
+        <span class="tool-desc">Web proxy</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">📡</span>
+        <span class="tool-name">Nmap</span>
+        <span class="tool-desc">Port scanner</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">💀</span>
+        <span class="tool-name">Metasploit</span>
+        <span class="tool-desc">Exploitation</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">👻</span>
+        <span class="tool-name">Ghidra</span>
+        <span class="tool-desc">Reversing</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">🦈</span>
+        <span class="tool-name">Wireshark</span>
+        <span class="tool-desc">Packet analysis</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">🐱</span>
+        <span class="tool-name">Hashcat</span>
+        <span class="tool-desc">Password cracking</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">🐍</span>
+        <span class="tool-name">Impacket</span>
+        <span class="tool-desc">Network protocols</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">💉</span>
+        <span class="tool-name">sqlmap</span>
+        <span class="tool-desc">SQL injection</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">🌀</span>
+        <span class="tool-name">ffuf</span>
+        <span class="tool-desc">Web fuzzer</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">🐧</span>
+        <span class="tool-name">Kali Linux</span>
+        <span class="tool-desc">Pentest OS</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">📝</span>
+        <span class="tool-name">VS Code</span>
+        <span class="tool-desc">Editor</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">💎</span>
+        <span class="tool-name">Obsidian</span>
+        <span class="tool-desc">Notes</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="rss.xml">rss</a>
+        <a href="admin.html">admin</a>
+      </div>
+    </div>
+  </footer>  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-db.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>

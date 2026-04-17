@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post | bensec</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html" class="active-link">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="now.html">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <article class="post-page">
+
+    <!-- Back link -->
+    <a href="blog.html" class="post-back-link">← back to blog</a>
+
+    <!-- Hero header (full width) -->
+    <div class="post-hero reveal">
+      <span class="post-hero-label">// blog post</span>
+      <h1 id="post-title">Loading...</h1>
+      <div class="post-hero-meta">
+        <span class="post-meta-item">📅 <span id="post-date"></span></span>
+        <span class="post-meta-item post-meta-read">⏱ <span id="post-reading-time"></span></span>
+      </div>
+      <div class="post-hero-tags" id="post-tags-container"></div>
+    </div>
+
+    <!-- Compact TOC -->
+    <div class="post-toc-bar" id="post-toc">
+      <span class="post-toc-label">§</span>
+      <nav class="post-toc-links" id="toc-nav"></nav>
+    </div>
+
+    <!-- Post body -->
+    <div class="post-body reveal" id="post-body-content">
+      <p class="dim">Loading post...</p>
+    </div>
+
+    <!-- Bottom nav -->
+    <div class="post-bottom-nav reveal">
+      <a href="blog.html" class="post-bottom-btn">← all posts</a>
+      <button class="post-bottom-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ back to top</button>
+    </div>
+
+  </article>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="index.html">home</a>
+      </div>
+    </div>
+  </footer>  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-db.js"></script>
+
+  <script src="script.js"></script>
+  <script src="blog-engine.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(buildToc, 250);
+    });
+
+    function buildToc() {
+      var body = document.getElementById('post-body-content');
+      var nav  = document.getElementById('toc-nav');
+      var bar  = document.getElementById('post-toc');
+      if (!body || !nav) return;
+
+      var headings = body.querySelectorAll('h2, h3');
+      if (headings.length < 2) {
+        if (bar) bar.style.display = 'none';
+        return;
+      }
+
+      headings.forEach(function (h, i) {
+        var id = 'section-' + i;
+        h.id = id;
+        var a = document.createElement('a');
+        a.href = '#' + id;
+        a.textContent = h.textContent;
+        a.className = 'toc-item toc-' + h.tagName.toLowerCase();
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        nav.appendChild(a);
+      });
+    }
+  </script>
+</body>
+</html>

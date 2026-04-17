@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writeup: [BOX NAME] | bensec</title>
+  <meta name="description" content="CTF writeup for [BOX NAME] — [short summary].">
+  <meta property="og:title" content="Writeup: [BOX NAME] | bensec">
+  <meta property="og:description" content="CTF writeup for [BOX NAME].">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html" class="active-link">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="now.html">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <article class="post-page">
+    <div class="post-page-header reveal">
+      <h1>[BOX NAME] — Writeup</h1>
+      <div class="post-page-meta">
+        <span class="post-date">[DATE]</span>
+        <span class="reading-time">[X] min read</span>
+        <div class="post-tags">
+          <span class="tag" data-filter="walkthrough">walkthrough</span>
+          <span class="tag" data-filter="ctf">ctf</span>
+          <!-- change to htb or thm -->
+          <span class="tag" data-filter="htb">htb</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="post-toc reveal">
+      <h4>Table of Contents</h4>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#recon">Phase 1 — Reconnaissance</a></li>
+        <li><a href="#enum">Phase 2 — Enumeration</a></li>
+        <li><a href="#exploit">Phase 3 — Exploitation</a></li>
+        <li><a href="#privesc">Phase 4 — Privilege Escalation</a></li>
+        <li><a href="#flags">Phase 5 — Flags</a></li>
+      </ul>
+    </nav>
+
+    <div class="post-body">
+
+      <!-- OVERVIEW -->
+      <h2 id="overview" class="reveal">Overview</h2>
+      <p class="reveal">[Brief description of the box — OS, difficulty, key themes, attack chain summary.]</p>
+      <blockquote class="reveal">Difficulty: [Easy/Medium/Hard] | OS: [Linux/Windows] | Platform: [HTB/THM]</blockquote>
+
+      <!-- PHASE 1: RECON -->
+      <div class="writeup-phase phase-recon reveal">
+        <h2 id="recon"><span class="phase-num">01</span> Reconnaissance</h2>
+      </div>
+      <p class="reveal">[Describe initial scanning. What ports are open? What services are running?]</p>
+
+      <div class="code-block reveal">
+        <button class="copy-btn">copy</button>
+        <pre><code>nmap -sC -sV -oN scan.txt TARGET_IP
+
+# Paste scan results here</code></pre>
+      </div>
+
+      <!-- PHASE 2: ENUM -->
+      <div class="writeup-phase phase-enum reveal">
+        <h2 id="enum"><span class="phase-num">02</span> Enumeration</h2>
+      </div>
+      <p class="reveal">[What did you find on the web server, SMB share, etc? Directory bruteforcing results, interesting files, credentials found.]</p>
+
+      <div class="code-block reveal">
+        <button class="copy-btn">copy</button>
+        <pre><code># Directory enumeration, service probing, etc.
+# Paste commands and results here</code></pre>
+      </div>
+
+      <!-- PHASE 3: EXPLOIT -->
+      <div class="writeup-phase phase-exploit reveal">
+        <h2 id="exploit"><span class="phase-num">03</span> Exploitation</h2>
+      </div>
+      <p class="reveal">[How did you gain initial access? What vulnerability did you exploit?]</p>
+
+      <div class="code-block reveal">
+        <button class="copy-btn">copy</button>
+        <pre><code># Exploit commands here</code></pre>
+      </div>
+
+      <!-- PHASE 4: PRIV ESC -->
+      <div class="writeup-phase phase-priv reveal">
+        <h2 id="privesc"><span class="phase-num">04</span> Privilege Escalation</h2>
+      </div>
+      <p class="reveal">[How did you escalate from user to root/admin?]</p>
+
+      <div class="code-block reveal">
+        <button class="copy-btn">copy</button>
+        <pre><code># Priv esc commands here</code></pre>
+      </div>
+
+      <!-- PHASE 5: FLAGS -->
+      <div class="writeup-phase phase-flags reveal">
+        <h2 id="flags"><span class="phase-num">05</span> Flags</h2>
+      </div>
+      <p class="reveal">[Confirm flags obtained. Add any final notes or takeaways.]</p>
+
+      <ul class="reveal">
+        <li><strong>User flag:</strong> <code>[REDACTED]</code></li>
+        <li><strong>Root flag:</strong> <code>[REDACTED]</code></li>
+      </ul>
+
+      <h2 class="reveal">Takeaways</h2>
+      <ul class="reveal">
+        <li>[Key lesson 1]</li>
+        <li>[Key lesson 2]</li>
+        <li>[Key lesson 3]</li>
+      </ul>
+    </div>
+
+    <div class="post-nav reveal">
+      <a href="#">&larr; Previous writeup</a>
+      <a href="#">Next writeup &rarr;</a>
+    </div>
+  </article>
+
+  <footer>
+    <p>&copy; 2026 Ben Hawarden · <a href="rss.xml">rss</a></p>
+  </footer>  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-db.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>

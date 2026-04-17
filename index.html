@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ben Hawarden | Cyber Security</title>
+  <meta name="description" content="Ben Hawarden — cyber security student, penetration tester, and CTF player. Top 2% on TryHackMe with 142 rooms completed.">
+  <meta name="author" content="Ben">
+  <meta name="keywords" content="cyber security, penetration testing, CTF, TryHackMe, Hack The Box, infosec, ethical hacking">
+  <meta property="og:title" content="Ben Hawarden | Cyber Security">
+  <meta property="og:description" content="Breaking, building, and securing systems. Top 2% on TryHackMe. CTF player and aspiring penetration tester.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bensec.dev">
+  <meta property="og:image" content="https://bensec.dev/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ben Hawarden | Cyber Security">
+  <meta name="twitter:description" content="Breaking, building, and securing systems. Top 2% on TryHackMe.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="alternate" type="application/rss+xml" title="bensec blog" href="rss.xml">
+  <link rel="stylesheet" href="style.css">
+  <!-- ── Premium Blue theme override (index only) ── -->
+  <style>
+    [data-theme="dark"] {
+      --bg: #050912;
+      --bg-raised: #080f1e;
+      --bg-card: #0c1628;
+      --bg-code: #070d1a;
+      --text: #e8eef8;
+      --text-dim: #8a9bbf;
+      --text-heading: #ffffff;
+      --accent: #4f8fff;
+      --accent-dim: rgba(79, 143, 255, 0.18);
+      --accent-border: rgba(79, 143, 255, 0.45);
+      --accent-glow: rgba(79, 143, 255, 0.3);
+      --green: #4f8fff;
+      --green-dim: rgba(79, 143, 255, 0.18);
+      --green-glow: rgba(79, 143, 255, 0.25);
+      --cyan: #a8c8ff;
+      --cyan-dim: rgba(168, 200, 255, 0.18);
+      --amber: #ffffff;
+      --amber-dim: rgba(255, 255, 255, 0.1);
+      --rose: #7eb8ff;
+      --rose-dim: rgba(126, 184, 255, 0.18);
+      --blue: #c4daff;
+      --orange: #7eb8ff;
+      --border: #162040;
+      --border-light: #1e2e55;
+      --copy-bg: #0e1830;
+      --search-bg: #080f1e;
+      --shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+      --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.7);
+      --gradient-hero: linear-gradient(135deg, rgba(79, 143, 255, 0.14) 0%, rgba(168, 200, 255, 0.06) 100%);
+      --gradient-card: linear-gradient(135deg, var(--bg-card) 0%, rgba(79, 143, 255, 0.1) 100%);
+    }
+
+    /* Blue-to-white shimmer on hero name */
+    .hero h1 {
+      background: linear-gradient(90deg, #4f8fff 0%, #ffffff 45%, #4f8fff 75%, #a8c8ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Blue accent line */
+    .section-line {
+      background: linear-gradient(90deg, #4f8fff, transparent);
+    }
+
+    /* Nav border */
+    header {
+      border-bottom-color: #162040;
+    }
+
+    /* Hero buttons */
+    .hero-btn {
+      border-color: rgba(79, 143, 255, 0.45);
+      color: #4f8fff;
+    }
+    .hero-btn:hover {
+      background: rgba(79, 143, 255, 0.14);
+      border-color: #4f8fff;
+    }
+
+    /* Status dot — blue pulse */
+    .status-dot { background: #4f8fff; }
+    @keyframes bluePulse {
+      0%   { box-shadow: 0 0 0 0 rgba(79, 143, 255, 0.6); }
+      70%  { box-shadow: 0 0 0 8px rgba(79, 143, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(79, 143, 255, 0); }
+    }
+    .status-dot { animation: bluePulse 2s ease-out infinite; }
+
+    /* Terminal widget */
+    .terminal-dot.red    { background: #4f8fff; }
+    .terminal-dot.yellow { background: #a8c8ff; }
+    .terminal-dot.green  { background: #ffffff; }
+    .terminal-bar        { background: #080f1e; border-bottom-color: #162040; }
+    .terminal-widget     { background: #050912; border-color: #162040; }
+    .t-green             { color: #4f8fff; }
+
+    /* Tags */
+    .tag {
+      background: rgba(79, 143, 255, 0.14);
+      color: #4f8fff;
+      border-color: rgba(79, 143, 255, 0.3);
+    }
+    .tag:hover {
+      background: rgba(79, 143, 255, 0.26);
+      border-color: #4f8fff;
+    }
+
+    /* Footer */
+    footer { border-top-color: #162040; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar-thumb { background: #1e2e55; }
+    ::-webkit-scrollbar-thumb:hover { background: #4f8fff; }
+    html { scrollbar-color: #1e2e55 #050912; }
+
+    /* Selection */
+    ::selection { background: #4f8fff; color: #050912; }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="now.html">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-content">
+      <p class="hero-pre"><span class="typing" data-text="$ whoami"></span></p>
+      <h1 class="reveal">Ben Hawarden</h1>
+      <p class="hero-sub reveal">
+        <span class="hero-role">Cyber Security Student</span>
+        <span class="hero-separator">|</span>
+        <span class="hero-role-dim">CTF Player</span>
+      </p>
+      <div class="status-indicator reveal" id="hero-status" style="display:none;">
+        <span class="status-dot"></span>
+        <span id="hero-status-text"></span>
+      </div>
+      <p class="hero-bio reveal">Breaking, building, and securing systems. Interested in penetration testing, CTFs, and offensive security tooling.</p>
+      <div class="hero-links reveal">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener" class="hero-btn"><span class="btn-icon">></span> github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener" class="hero-btn"><span class="btn-icon">></span> linkedin</a>
+      </div>
+    </div>
+    <aside class="hero-aside reveal">
+      <div class="terminal-widget">
+        <div class="terminal-bar">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">stats.sh</span>
+        </div>
+        <div class="terminal-body">
+          <p><span class="t-green">$</span> cat /etc/rank</p>
+          <p class="t-dim">Top 2% — TryHackMe</p>
+          <p><span class="t-green">$</span> wc -l rooms_completed</p>
+          <p class="t-dim">142 rooms</p>
+          <p><span class="t-green">$</span> echo $LEVEL</p>
+          <p class="t-dim">0xC [GURU]</p>
+          <p><span class="t-green">$</span> uptime</p>
+          <p class="t-dim">40,089 points</p>
+          <p class="t-cursor"><span class="t-green">$</span> <span class="blink">█</span></p>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- Blog -->
+  <section class="section" id="blog">
+    <div class="section-header">
+      <p class="section-label">// recent posts</p>
+      <div class="section-line"></div>
+    </div>
+
+    <div id="blog-posts"></div>
+    <p id="no-results" class="hidden dim">no posts matched your search.</p>
+  </section>
+
+  <!-- Projects -->
+  <section class="section" id="projects">
+    <div class="section-header">
+      <p class="section-label">// projects</p>
+      <div class="section-line"></div>
+    </div>
+
+    <div id="projects-list">
+      <div class="project reveal">
+        <h3><span class="project-icon">🐍</span> Viper C2</h3>
+        <p>A custom Command &amp; Control server for post-exploitation and red team operations.</p>
+        <p class="project-meta"><span>python</span> · <span>red team</span> · <span>c2</span> · <a href="https://github.com/Ben-Hawarden/Viper-C2" target="_blank" rel="noopener">source</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="admin.html">admin</a>
+      </div>
+    </div>
+  </footer>  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-db.js"></script>
+
+  <script src="script.js"></script>
+  <script src="blog-engine.js"></script>
+</body>
+</html>
