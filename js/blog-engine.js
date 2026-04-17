@@ -820,6 +820,27 @@ sudo -u#-1 /bin/bash
         if (user) {
           loginScreen.classList.add('hidden');
           dashboard.classList.remove('hidden');
+          // One-time migration: replace old seeded bensec.dev project with Viper C2
+          (function migrateBensecToViper() {
+            var projects = getProjects();
+            var hasBensec = projects.some(function (p) { return p.id === 'proj-bensec'; });
+            var hasViper  = projects.some(function (p) { return p.id === 'proj-viper-c2'; });
+            if (hasBensec && !hasViper) {
+              var migrated = projects.filter(function (p) { return p.id !== 'proj-bensec'; });
+              migrated.push({
+                id: 'proj-viper-c2',
+                title: 'Viper C2',
+                icon: '🐍',
+                description: 'A custom Command & Control server for post-exploitation and red team operations.',
+                tags: 'python red team c2',
+                url: 'https://github.com/Ben-Hawarden/Viper-C2',
+                status: 'visible',
+                order: 1
+              });
+              saveProjects(migrated);
+            }
+          })();
+
           // Seed defaults on first login (runs only once — guarded by empty check)
           seedDefaultPosts();
           seedDefaultProjects();
