@@ -6,7 +6,7 @@
   <title>Blog | Ben Hawarden</title>
   <meta name="description" content="CTF writeups, security notes, and things I've learned.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -50,19 +50,7 @@
       <p class="section-label">// ctf writeups</p>
       <div class="section-line"></div>
     </div>
-    <div id="blog-ctf-posts">
-      <!-- placeholder -->
-      <div class="post reveal" data-tags="walkthrough ctf htb">
-        <span class="post-date">2026-04-08</span>
-        <h3><a href="post-template.html">HTB Walkthrough: Headless</a></h3>
-        <p>Step-by-step walkthrough of the Headless box on Hack The Box — XSS to RCE via blind injection.</p>
-        <div class="post-tags">
-          <span class="tag">walkthrough</span>
-          <span class="tag">htb</span>
-          <span class="tag">easy</span>
-        </div>
-      </div>
-    </div>
+    <div id="blog-ctf-posts"></div>
     <p class="blog-empty hidden" id="ctf-empty">No CTF writeups yet.</p>
   </section>
 
@@ -72,18 +60,7 @@
       <p class="section-label">// notes &amp; learnings</p>
       <div class="section-line"></div>
     </div>
-    <div id="blog-notes-posts">
-      <!-- placeholder -->
-      <div class="post reveal" data-tags="guide bugbounty">
-        <span class="post-date">2026-03-25</span>
-        <h3><a href="#">Getting Started with Bug Bounties</a></h3>
-        <p>A beginner-friendly guide to finding your first vulnerability and navigating bug bounty platforms.</p>
-        <div class="post-tags">
-          <span class="tag">guide</span>
-          <span class="tag">bugbounty</span>
-        </div>
-      </div>
-    </div>
+    <div id="blog-notes-posts"></div>
     <p class="blog-empty hidden" id="notes-empty">No notes yet.</p>
   </section>
 
@@ -100,11 +77,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
-  <script src="firebase-db.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-db.js"></script>
 
-  <script src="script.js"></script>
-  <script src="blog-engine.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/blog-engine.js"></script>
   <script>
     // Tab switching
     document.querySelectorAll('.blog-tab-btn').forEach(function (btn) {

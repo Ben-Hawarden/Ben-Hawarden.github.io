@@ -1160,6 +1160,31 @@ sudo -u#-1 /bin/bash
       saveCurrentPost('draft');
     });
 
+    // ── Keyboard shortcuts (editor) ──
+    // Ctrl/Cmd+S     → save as draft
+    // Ctrl/Cmd+Enter → publish
+    // Escape         → back to posts (with confirm if dirty)
+    function editorShortcut(e) {
+      if (editorEl.classList.contains('hidden')) return;
+      var mod = e.ctrlKey || e.metaKey;
+      if (mod && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        saveCurrentPost('draft');
+      } else if (mod && e.key === 'Enter') {
+        e.preventDefault();
+        saveCurrentPost('published');
+      } else if (e.key === 'Escape') {
+        if (document.getElementById('ctf-template-modal') ||
+            document.getElementById('image-url-modal')) return; // let modals own Esc
+        if (bodyInput.value.trim() || titleInput.value.trim()) {
+          if (!confirm('Discard unsaved changes?')) return;
+        }
+        hideEditor();
+        renderAdminPosts();
+      }
+    }
+    document.addEventListener('keydown', editorShortcut);
+
     function saveCurrentPost(status) {
       var title = titleInput.value.trim();
       var date = dateInput.value;
@@ -1327,7 +1352,8 @@ sudo -u#-1 /bin/bash
     //  TEMPLATES
     // ══════════════════════════════════
 
-    var templateCtfBtn = document.getElementById('template-ctf-btn');
+    var templateCtfBtn  = document.getElementById('template-ctf-btn');
+    var templateNoteBtn = document.getElementById('template-note-btn');
 
     if (templateCtfBtn) {
       templateCtfBtn.addEventListener('click', function () {
@@ -1335,6 +1361,31 @@ sudo -u#-1 /bin/bash
             !confirm('This will replace the current content. Continue?')) return;
 
         showCtfTemplateModal();
+      });
+    }
+
+    if (templateNoteBtn) {
+      templateNoteBtn.addEventListener('click', function () {
+        if ((titleInput.value.trim() || bodyInput.value.trim()) &&
+            !confirm('This will replace the current content. Continue?')) return;
+        bodyInput.value =
+          '# ' + (titleInput.value.trim() || 'Note title') + '\n\n' +
+          '> One-line summary of what this note covers.\n\n' +
+          '## Context\n\n' +
+          'What problem were you solving? Any background worth noting?\n\n' +
+          '## Key points\n\n' +
+          '- Point one\n' +
+          '- Point two\n' +
+          '- Point three\n\n' +
+          '## Commands / code\n\n' +
+          '```bash\n' +
+          '# example\n' +
+          '```\n\n' +
+          '## Takeaways\n\n' +
+          'What did you learn? What would you do differently?\n';
+        if (!tagsInput.value.trim()) tagsInput.value = 'notes';
+        updateCounts();
+        showToast('Quick note template loaded');
       });
     }
 

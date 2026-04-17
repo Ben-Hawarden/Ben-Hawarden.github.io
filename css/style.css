@@ -2348,3 +2348,16 @@ textarea.editor-input {
   .editor-row { flex-direction: column; gap: 0.5rem; }
   .admin-search { max-width: none; }
 }
+
+/* Keyboard shortcut hints in editor footer */
+.editor-help kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font-family: inherit;
+  font-size: 10px;
+  background: rgba(0, 255, 140, 0.08);
+  border: 1px solid rgba(0, 255, 140, 0.25);
+  border-radius: 3px;
+  color: var(--green, #00ff8c);
+  margin: 0 1px;
+}

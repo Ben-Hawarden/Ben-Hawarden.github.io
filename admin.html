@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin | bensec</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -201,6 +201,7 @@
                 <div class="editor-toolbar">
                   <span class="toolbar-label">templates:</span>
                   <button type="button" class="toolbar-btn" id="template-ctf-btn" title="CTF writeup template">🚩 CTF writeup</button>
+                  <button type="button" class="toolbar-btn" id="template-note-btn" title="Quick note template">📝 Quick note</button>
                   <span class="toolbar-sep">|</span>
                   <span class="toolbar-label">insert:</span>
                   <button type="button" class="toolbar-btn" id="insert-image-btn" title="Upload image">🖼️ image</button>
@@ -236,7 +237,7 @@ code block
 [link text](url)
 ![alt text](image-url)"></textarea>
                 <div class="editor-footer-bar">
-                  <p class="editor-help">Supports: # headings, **bold**, *italic*, `code`, ```code blocks```, > quotes, - lists, [links](url), ![images](url)</p>
+                  <p class="editor-help">Shortcuts: <kbd>Ctrl</kbd>+<kbd>S</kbd> draft · <kbd>Ctrl</kbd>+<kbd>Enter</kbd> publish · <kbd>Esc</kbd> back · Supports markdown</p>
                   <span class="editor-word-count" id="word-count">0 words</span>
                 </div>
               </div>
@@ -280,10 +281,10 @@ code block
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
-  <script src="firebase-db.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-db.js"></script>
 
-  <script src="script.js"></script>
-  <script src="blog-engine.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/blog-engine.js"></script>
 </body>
 </html>
