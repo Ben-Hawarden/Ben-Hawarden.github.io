@@ -286,7 +286,6 @@ sudo -u#-1 /bin/bash
       }
     ];
     savePosts(defaults.concat(existing));
-    localStorage.setItem(SEED_KEY, '1');
   }
 
 
