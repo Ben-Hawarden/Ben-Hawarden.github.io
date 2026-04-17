@@ -2424,31 +2424,65 @@ textarea.editor-input {
 
 .post-readtime { color: var(--text-dim); font-size: 11px; }
 
-/* Admin post status filter (all / published / draft) */
+/* Admin post status filter (all / published / draft) — segmented control */
 .admin-filter-group {
   display: inline-flex;
-  gap: 2px;
-  padding: 2px;
-  background: rgba(0, 255, 140, 0.04);
-  border: 1px solid rgba(0, 255, 140, 0.18);
-  border-radius: 4px;
+  padding: 3px;
+  background: linear-gradient(180deg, rgba(0, 255, 140, 0.03), rgba(0, 255, 140, 0.06));
+  border: 1px solid rgba(0, 255, 140, 0.22);
+  border-radius: 6px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 .admin-filter-btn {
+  position: relative;
   background: transparent;
   border: none;
   color: var(--text-dim);
   font-family: inherit;
   font-size: 12px;
-  padding: 0.35rem 0.75rem;
+  letter-spacing: 0.3px;
+  text-transform: lowercase;
+  padding: 0.4rem 0.95rem;
   cursor: pointer;
-  border-radius: 3px;
-  transition: all 0.15s;
+  border-radius: 4px;
+  transition: color 0.18s ease, background 0.18s ease, transform 0.08s ease;
+  outline: none;
 }
-.admin-filter-btn:hover { color: var(--text, #e6edf3); }
+.admin-filter-btn::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+  margin-right: 6px;
+  opacity: 0.35;
+  vertical-align: middle;
+  transition: opacity 0.18s ease, box-shadow 0.18s ease;
+}
+.admin-filter-btn:hover {
+  color: var(--text, #e6edf3);
+  background: rgba(0, 255, 140, 0.05);
+}
+.admin-filter-btn:hover::before { opacity: 0.65; }
+.admin-filter-btn:active { transform: translateY(1px); }
+.admin-filter-btn:focus-visible {
+  box-shadow: 0 0 0 2px rgba(0, 255, 140, 0.4);
+}
 .admin-filter-btn.active {
-  background: rgba(0, 255, 140, 0.15);
+  background: rgba(0, 255, 140, 0.18);
   color: var(--green, #00ff8c);
+  box-shadow: 0 0 0 1px rgba(0, 255, 140, 0.35), 0 0 10px rgba(0, 255, 140, 0.12);
+  font-weight: 600;
 }
+.admin-filter-btn.active::before {
+  opacity: 1;
+  box-shadow: 0 0 6px currentColor;
+}
+/* Per-filter accent dot colors */
+.admin-filter-btn[data-filter="published"]::before { color: #00ff8c; }
+.admin-filter-btn[data-filter="draft"]::before     { color: #ffb347; }
+.admin-filter-btn[data-filter="all"]::before       { color: #8899aa; }
 
 /* Blog tag filter chips */
 .blog-tag-filter {
