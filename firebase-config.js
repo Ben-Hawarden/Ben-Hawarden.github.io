@@ -12,4 +12,4 @@ var FIREBASE_CONFIG = {
 
 // The email address you'll use to log into the admin panel.
 // Must match the user you create in Firebase Console → Authentication → Users
-var ADMIN_EMAIL = "your@email.com";
+var ADMIN_EMAIL = "benhawarden@gmail.com";

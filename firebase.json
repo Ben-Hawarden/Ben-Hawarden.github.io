@@ -3,9 +3,12 @@
     "public": ".",
     "ignore": [
       "firebase.json",
-      "**/.*",
       "firestore.rules",
-      "firebase-db.js"
+      ".firebase/**",
+      ".firebaserc",
+      ".git/**",
+      ".gitignore",
+      "yes/**"
     ]
   }
 }
