@@ -2361,3 +2361,17 @@ textarea.editor-input {
   color: var(--green, #00ff8c);
   margin: 0 1px;
 }
+
+/* Subtle "ghost" admin buttons — for rarely-used actions like export/import */
+.admin-btn.ghost {
+  opacity: 0.45;
+  padding: 0.3rem 0.55rem;
+  font-size: 13px;
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.admin-btn.ghost:hover {
+  opacity: 1;
+  background: rgba(0, 255, 140, 0.08);
+  border-color: rgba(0, 255, 140, 0.3);
+}
