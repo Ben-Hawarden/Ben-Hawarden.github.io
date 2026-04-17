@@ -293,12 +293,12 @@ sudo -u#-1 /bin/bash
     if (getProjects().length > 0) return;
     var defaults = [
       {
-        id: 'proj-bensec',
-        title: 'bensec.dev',
-        icon: '🌐',
-        description: 'This site — a hacker-themed personal portfolio and blog with a Firebase-backed admin panel.',
-        tags: 'html css javascript firebase',
-        url: 'https://github.com/Ben-Hawarden/Ben-Hawarden.github.io',
+        id: 'proj-viper-c2',
+        title: 'Viper C2',
+        icon: '🐍',
+        description: 'A custom Command & Control server for post-exploitation and red team operations.',
+        tags: 'python red team c2',
+        url: 'https://github.com/Ben-Hawarden/Viper-C2',
         status: 'visible',
         order: 1
       }
