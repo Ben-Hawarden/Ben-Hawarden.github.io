@@ -924,8 +924,7 @@ sudo -u#-1 /bin/bash
         btn.addEventListener('click', function () {
           var id = btn.closest('.admin-post-item').dataset.id;
           showDeleteConfirm(id, function () {
-            var posts = getPosts().filter(function (p) { return p.id !== id; });
-            savePosts(posts);
+            if (window.BensecDB) BensecDB.deletePost(id);
             renderAdminPosts();
             updateStats();
             showToast('Post deleted');
@@ -1097,29 +1096,19 @@ sudo -u#-1 /bin/bash
 
       var posts = getPosts();
 
-      if (editingId) {
-        var idx = posts.findIndex(function (p) { return p.id === editingId; });
-        if (idx !== -1) {
-          posts[idx].title = title;
-          posts[idx].date = date;
-          posts[idx].tags = tags;
-          posts[idx].summary = summary;
-          posts[idx].body = body;
-          posts[idx].status = status;
-        }
-      } else {
-        posts.push({
-          id: 'post_' + Date.now(),
-          title: title,
-          date: date,
-          tags: tags,
-          summary: summary,
-          body: body,
-          status: status
-        });
-      }
+      var post = {
+        id: editingId || ('post_' + Date.now()),
+        title: title,
+        date: date,
+        tags: tags,
+        summary: summary,
+        body: body,
+        status: status
+      };
 
-      savePosts(posts);
+      if (window.BensecDB) {
+        BensecDB.savePost(post);
+      }
       clearDraft();
       hideEditor();
       editingId = null;
@@ -1133,8 +1122,7 @@ sudo -u#-1 /bin/bash
       if (!editingId) return;
       var idToDelete = editingId;
       showDeleteConfirm(idToDelete, function () {
-        var posts = getPosts().filter(function (p) { return p.id !== idToDelete; });
-        savePosts(posts);
+        if (window.BensecDB) BensecDB.deletePost(idToDelete);
         hideEditor();
         editingId = null;
         renderAdminPosts();
@@ -1833,7 +1821,6 @@ toolList + '\n\n' +
   // ══════════════════════════════════
 
   function initCheatsheetAdmin() {
-    var CS_KEY = 'bensec_cheatsheets';
     var tab = document.getElementById('tab-cheatsheets');
     var tabPosts = document.getElementById('tab-posts');
     var tabProjects = document.getElementById('tab-projects');

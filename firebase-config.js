@@ -1,14 +1,13 @@
 // ── Firebase Configuration ──
-// Fill in your Firebase project details below.
-// Get these from: Firebase Console → Project Settings → Your Apps → SDK setup
 
 var FIREBASE_CONFIG = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  apiKey:            "AIzaSyDByCS0z5j756gcXRDPYj_s6NkIlo9dgc0",
+  authDomain:        "ben-hawarden-blog.firebaseapp.com",
+  projectId:         "ben-hawarden-blog",
+  storageBucket:     "ben-hawarden-blog.firebasestorage.app",
+  messagingSenderId: "163139751557",
+  appId:             "1:163139751557:web:51ec5ca645b0aa885aa3ec",
+  measurementId:     "G-GM7E95B327"
 };
 
 // The email address you'll use to log into the admin panel.
