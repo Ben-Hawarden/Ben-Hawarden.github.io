@@ -349,10 +349,8 @@
     }
   }
 
-  // ─────────────────────────────────────────────
-  // feat: duplicate post
-  // ─────────────────────────────────────────────
-  function initDuplicatePost() {
+  // ── feat: duplicate post — disabled, main admin UI has a duplicate button ──
+  function initDuplicatePost() { return; // main UI already has duplicate
     var list = document.getElementById('posts-list');
     if (!list || list.__dupInit) return;
     list.__dupInit = true;

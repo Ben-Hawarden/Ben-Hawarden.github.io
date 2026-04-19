@@ -256,8 +256,8 @@
     });
   }
 
-  // ── feat: inline row actions (quick delete + toggle draft) ──
-  function initInlineActions() {
+  // ── feat: inline row actions — disabled, main admin UI has these buttons ──
+  function initInlineActions() { return; // main UI already has toggle/delete
     var list = document.getElementById('posts-list');
     if (!list || list.__inlineInit) return;
     list.__inlineInit = true;

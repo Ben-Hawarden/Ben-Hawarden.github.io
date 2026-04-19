@@ -52,7 +52,8 @@
   }(0));
 
   // ── feat: bulk actions on posts list ──
-  function initBulkActions() {
+  // NOTE: disabled — admin-extras-3.js has the canonical implementation
+  function initBulkActions() { return; // superseded by admin-extras-3
     var list = document.getElementById('posts-list');
     var panel = document.getElementById('posts-panel');
     if (!list || !panel) return;
