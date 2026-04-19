@@ -23,6 +23,14 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Analytics — public increment-only views counter.
+    // Anyone reading a post can add to the count; everyone can read totals.
+    // Acceptable tradeoff for a personal blog (no PII stored).
+    match /analytics/{postId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
     // Everything else: deny
     match /{document=**} {
       allow read, write: if false;

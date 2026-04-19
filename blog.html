@@ -7,8 +7,19 @@
   <meta name="description" content="CTF writeups, security notes, and things I've learned.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00ff8c">
+  <meta name="description" content="Ben Hawarden's blog — CTF writeups, hacking notes, and security posts.">
+  <meta property="og:title" content="Blog | bensec">
+  <meta property="og:description" content="Ben Hawarden's blog — CTF writeups, hacking notes, and security posts.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon.svg">
+  <meta name="twitter:card" content="summary">
+  <!-- feat:head -->
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a><!-- feat:skip -->
 
   <canvas id="matrix-bg"></canvas>
   <div class="scanlines"></div>
@@ -55,7 +66,7 @@
   </div>
 
   <!-- CTF Writeups -->
-  <section class="section blog-section" id="section-ctf">
+  <section id="main" class="section blog-section" id="section-ctf">
     <div class="section-header">
       <p class="section-label">// ctf writeups</p>
       <div class="section-line"></div>
@@ -109,5 +120,6 @@
       });
     });
   </script>
+  <script src="js/skeleton-loaders.js"></script>
 </body>
 </html>

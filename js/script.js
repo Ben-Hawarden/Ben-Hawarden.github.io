@@ -3,9 +3,26 @@ const menuBtn = document.querySelector('.mobile-menu-btn');
 const navLinks = document.querySelector('.nav-links');
 
 if (menuBtn && navLinks) {
-  menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+  // feat: a11y — aria-expanded toggling
+  menuBtn.setAttribute('aria-expanded', 'false');
+  menuBtn.setAttribute('aria-controls', 'primary-nav');
+  if (!navLinks.id) navLinks.id = 'primary-nav';
+  menuBtn.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
   navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => navLinks.classList.remove('open'));
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+// feat: PWA — register service worker
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function () { /* no-op */ });
   });
 }
 

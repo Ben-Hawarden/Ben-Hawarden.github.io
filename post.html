@@ -6,8 +6,19 @@
   <title>Post | bensec</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00ff8c">
+  <meta name="description" content="Blog post by Ben Hawarden.">
+  <meta property="og:title" content="Post | bensec">
+  <meta property="og:description" content="Blog post by Ben Hawarden.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon.svg">
+  <meta name="twitter:card" content="summary">
+  <!-- feat:head -->
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a><!-- feat:skip -->
 
   <canvas id="matrix-bg"></canvas>
   <div class="scanlines"></div>
@@ -31,7 +42,7 @@
     </nav>
   </header>
 
-  <article class="post-page">
+  <article id="main" class="post-page">
 
     <!-- Back link -->
     <a href="blog.html" class="post-back-link">← back to blog</a>
@@ -116,5 +127,8 @@
       });
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="js/post-enhancements.js"></script>
 </body>
 </html>

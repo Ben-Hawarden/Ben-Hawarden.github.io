@@ -17,6 +17,16 @@
   <meta name="twitter:description" content="Breaking, building, and securing systems. Top 2% on TryHackMe.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00ff8c">
+  <meta name="description" content="Ben Hawarden — cybersecurity portfolio, blog, projects, and cheatsheets.">
+  <meta property="og:title" content="Ben Hawarden">
+  <meta property="og:description" content="Ben Hawarden — cybersecurity portfolio, blog, projects, and cheatsheets.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon.svg">
+  <meta name="twitter:card" content="summary">
+  <!-- feat:head -->
   <!-- ── Premium Blue theme override (index only) ── -->
   <style>
     [data-theme="dark"] {
@@ -121,6 +131,7 @@
   </style>
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a><!-- feat:skip -->
 
   <canvas id="matrix-bg"></canvas>
   <div class="scanlines"></div>
@@ -145,7 +156,7 @@
   </header>
 
   <!-- Hero -->
-  <section class="hero">
+  <section id="main" class="hero">
     <div class="hero-grid-bg"></div>
     <div class="hero-content">
       <p class="hero-pre"><span class="typing" data-text="$ whoami"></span></p>
@@ -233,5 +244,6 @@
 
   <script src="js/script.js"></script>
   <script src="js/blog-engine.js"></script>
+  <script src="js/skeleton-loaders.js"></script>
 </body>
 </html>

@@ -11,8 +11,19 @@
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00ff8c">
+  <meta name="description" content="Cybersecurity cheatsheets — reverse shells, privilege escalation, enumeration.">
+  <meta property="og:title" content="Cheatsheets | bensec">
+  <meta property="og:description" content="Cybersecurity cheatsheets — reverse shells, privilege escalation, enumeration.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon.svg">
+  <meta name="twitter:card" content="summary">
+  <!-- feat:head -->
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a><!-- feat:skip -->
 
   <canvas id="matrix-bg"></canvas>
   <div class="scanlines"></div>
@@ -69,5 +80,8 @@
 
   <script src="js/script.js"></script>
   <script src="js/cheatsheets.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="js/skeleton-loaders.js"></script>
 </body>
 </html>
