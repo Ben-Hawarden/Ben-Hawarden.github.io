@@ -2395,28 +2395,60 @@ textarea.editor-input {
   border-color: rgba(0, 255, 140, 0.3);
 }
 
-/* Blog reader search bar — subtle terminal style */
+/* Blog search — collapsed icon button that expands on click */
 .blog-search-bar {
-  max-width: 720px;
-  margin: 1.5rem auto 1.25rem;
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.6rem 0.95rem;
-  background: rgba(10, 10, 10, 0.35);
-  border: 1px solid rgba(0, 255, 140, 0.12);
-  border-radius: 6px;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  justify-content: flex-end;
+  margin: 1rem 0 1.25rem;
   position: relative;
 }
-.blog-search-bar:hover {
-  border-color: rgba(0, 255, 140, 0.25);
+
+/* collapsed toggle button */
+.blog-search-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--border, #1a1a1a);
+  border-radius: 4px;
+  color: var(--text-dim, #888);
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
 }
-.blog-search-bar:focus-within {
-  border-color: rgba(0, 255, 140, 0.45);
-  background: rgba(10, 10, 10, 0.5);
+.blog-search-toggle:hover {
+  border-color: var(--accent-border, rgba(0,255,140,0.3));
+  color: var(--accent, #00ff8c);
 }
+
+/* expanded state */
+.blog-search-bar.expanded {
+  justify-content: stretch;
+}
+.blog-search-bar.expanded .blog-search-toggle { display: none; }
+.blog-search-bar.expanded .blog-search-inner {
+  display: flex;
+  width: 100%;
+}
+
+.blog-search-inner {
+  display: none;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.9rem;
+  background: var(--bg-card, rgba(10,10,10,0.35));
+  border: 1px solid var(--accent-border, rgba(0,255,140,0.3));
+  border-radius: 6px;
+  width: 100%;
+}
+
 .blog-search-bar::before {
+  display: none; /* moved to inner */
+}
+.blog-search-inner::before {
   content: '$';
   color: rgba(0, 255, 140, 0.55);
   font-family: 'Fira Code', monospace;

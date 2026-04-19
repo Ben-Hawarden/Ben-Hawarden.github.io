@@ -60,11 +60,14 @@
 
   <!-- Search -->
   <div class="blog-search-bar" id="blog-search-bar">
-    <input type="text" id="blog-search" placeholder="grep posts, tags, or content..." autocomplete="off" spellcheck="false">
-    <span class="blog-search-caret" aria-hidden="true"></span>
-    <span class="blog-search-count" id="blog-search-count"></span>
-    <kbd class="blog-search-kbd" aria-hidden="true">/</kbd>
-    <button id="blog-search-clear" aria-label="Clear search" style="visibility:hidden;">✕</button>
+    <button class="blog-search-toggle" id="blog-search-toggle" aria-label="Open search" aria-expanded="false">
+      <span>⌕</span> search
+    </button>
+    <div class="blog-search-inner" id="blog-search-inner">
+      <input type="text" id="blog-search" placeholder="grep posts, tags, or content..." autocomplete="off" spellcheck="false">
+      <span class="blog-search-count" id="blog-search-count"></span>
+      <button id="blog-search-clear" aria-label="Close search">✕</button>
+    </div>
   </div>
 
   <!-- Post frequency heatmap (populated by site-analytics.js) -->
@@ -122,24 +125,39 @@
   <script src="js/script.js"></script>
   <script src="js/blog-engine.js"></script>
   <script>
-    // ── Search bar niceties: "/" shortcut, live count, has-query class ──
+    // ── Search bar: expand/collapse + "/" shortcut + live count ──
     (function () {
-      var bar = document.getElementById('blog-search-bar');
-      var input = document.getElementById('blog-search');
-      var count = document.getElementById('blog-search-count');
+      var bar    = document.getElementById('blog-search-bar');
+      var toggle = document.getElementById('blog-search-toggle');
+      var input  = document.getElementById('blog-search');
+      var count  = document.getElementById('blog-search-count');
+      var clear  = document.getElementById('blog-search-clear');
       if (!bar || !input) return;
 
-      // "/" focuses, Esc clears & blurs
+      function openSearch() {
+        bar.classList.add('expanded');
+        if (toggle) toggle.setAttribute('aria-expanded', 'true');
+        input.focus();
+      }
+      function closeSearch() {
+        input.value = '';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        bar.classList.remove('expanded');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        if (count) count.textContent = '';
+      }
+
+      if (toggle) toggle.addEventListener('click', openSearch);
+      if (clear)  clear.addEventListener('click', closeSearch);
+
+      // "/" key opens search
       document.addEventListener('keydown', function (e) {
         if (e.key === '/' && document.activeElement !== input &&
             !/input|textarea|select/i.test((document.activeElement || {}).tagName || '')) {
           e.preventDefault();
-          input.focus();
-          input.select();
-        } else if (e.key === 'Escape' && document.activeElement === input) {
-          input.value = '';
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-          input.blur();
+          openSearch();
+        } else if (e.key === 'Escape' && bar.classList.contains('expanded')) {
+          closeSearch();
         }
       });
 
@@ -152,7 +170,6 @@
         count.textContent = visible + ' match' + (visible === 1 ? '' : 'es');
       }
       input.addEventListener('input', function () { setTimeout(updateState, 0); });
-      setTimeout(updateState, 500);
     }());
 
     // Tab switching
