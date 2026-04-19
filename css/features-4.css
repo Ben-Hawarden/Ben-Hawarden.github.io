@@ -142,8 +142,9 @@ mark.post-search-hl.current {
   padding: 4px 0;
   line-height: 1.4;
   transition: color 0.15s;
-  white-space: normal;
-  word-break: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .toc-sb-item::before {
   content: '› ';
