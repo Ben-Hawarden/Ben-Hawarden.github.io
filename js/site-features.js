@@ -97,10 +97,8 @@
     }
   }
 
-  // ── feat: social proof strip on index ──
-  function initSocialProof() {
-    if (!/index\.html|^\/$|^\/$/i.test(location.pathname) &&
-        !document.querySelector('.hero')) return;
+  // ── feat: social proof strip — disabled ──
+  function initSocialProof() { return; /* removed per user request */
     var hero = document.querySelector('.hero');
     if (!hero || hero.querySelector('.social-proof-strip')) return;
 
