@@ -49,9 +49,11 @@
   </div>
 
   <!-- Search -->
-  <div class="blog-search-bar">
-    <span class="blog-search-icon">⌕</span>
-    <input type="text" id="blog-search" placeholder="search posts, tags, or content..." autocomplete="off">
+  <div class="blog-search-bar" id="blog-search-bar">
+    <input type="text" id="blog-search" placeholder="grep posts, tags, or content..." autocomplete="off" spellcheck="false">
+    <span class="blog-search-caret" aria-hidden="true"></span>
+    <span class="blog-search-count" id="blog-search-count"></span>
+    <kbd class="blog-search-kbd" aria-hidden="true">/</kbd>
     <button id="blog-search-clear" aria-label="Clear search" style="visibility:hidden;">✕</button>
   </div>
 
@@ -104,6 +106,39 @@
   <script src="js/script.js"></script>
   <script src="js/blog-engine.js"></script>
   <script>
+    // ── Search bar niceties: "/" shortcut, live count, has-query class ──
+    (function () {
+      var bar = document.getElementById('blog-search-bar');
+      var input = document.getElementById('blog-search');
+      var count = document.getElementById('blog-search-count');
+      if (!bar || !input) return;
+
+      // "/" focuses, Esc clears & blurs
+      document.addEventListener('keydown', function (e) {
+        if (e.key === '/' && document.activeElement !== input &&
+            !/input|textarea|select/i.test((document.activeElement || {}).tagName || '')) {
+          e.preventDefault();
+          input.focus();
+          input.select();
+        } else if (e.key === 'Escape' && document.activeElement === input) {
+          input.value = '';
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.blur();
+        }
+      });
+
+      function updateState() {
+        var q = (input.value || '').trim();
+        bar.classList.toggle('has-query', q.length > 0);
+        if (!count) return;
+        if (!q) { count.textContent = ''; return; }
+        var visible = document.querySelectorAll('#blog-posts .post:not(.search-hidden), .post:not(.search-hidden)').length;
+        count.textContent = visible + ' match' + (visible === 1 ? '' : 'es');
+      }
+      input.addEventListener('input', function () { setTimeout(updateState, 0); });
+      setTimeout(updateState, 500);
+    }());
+
     // Tab switching
     document.querySelectorAll('.blog-tab-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
