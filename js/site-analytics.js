@@ -103,8 +103,8 @@
       }).catch(function () {});
   }
 
-  // ── feat: post heatmap on blog page ──
-  function renderHeatmap() {
+  // ── feat: post heatmap — disabled ──
+  function renderHeatmap() { return;
     var container = document.getElementById('blog-heatmap');
     if (!container) return;
     var posts = (window.BensecDB && BensecDB.getPosts) ? BensecDB.getPosts() : [];
