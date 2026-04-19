@@ -209,6 +209,38 @@
     } catch (e) { /* silent */ }
   }
 
+  // ── feat: footnotes ([^n] inline + [^n]: definition) ──
+  function processFootnotes() {
+    var body = document.getElementById('post-body-content');
+    if (!body) return;
+    var html = body.innerHTML;
+    // Find definitions: look for text like [^1]: ... at start of a paragraph or line
+    var defMap = {};
+    var order = [];
+    html = html.replace(/\[\^([\w-]+)\]:\s*(.+?)(?=(?:<br\s*\/?>|<\/p>|$))/g, function (_, id, text) {
+      defMap[id] = text.trim();
+      return ''; // strip definition from body
+    });
+    // Replace inline references
+    var counter = 0;
+    html = html.replace(/\[\^([\w-]+)\]/g, function (_, id) {
+      if (!defMap[id]) return '[^' + id + ']';
+      if (order.indexOf(id) === -1) order.push(id);
+      var n = order.indexOf(id) + 1;
+      return '<sup class="fn-ref"><a id="fnref-' + id + '" href="#fn-' + id + '">' + n + '</a></sup>';
+    });
+    if (order.length) {
+      var list = '<section class="footnotes"><h3>// footnotes</h3><ol>';
+      order.forEach(function (id) {
+        list += '<li id="fn-' + id + '">' + defMap[id] +
+                ' <a class="fn-back" href="#fnref-' + id + '" aria-label="Back to reference">↩</a></li>';
+      });
+      list += '</ol></section>';
+      html += list;
+    }
+    body.innerHTML = html;
+  }
+
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -221,6 +253,7 @@
     waitForRender(function () {
       initCopyCode();
       initPrism();
+      processFootnotes();
       renderRelatedAndNav();
       recordView();
     });

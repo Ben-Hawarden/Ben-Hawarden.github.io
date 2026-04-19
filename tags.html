@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tags | bensec</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="stylesheet" href="css/features-2.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00ff8c">
+  <meta name="description" content="Every tag on the bensec blog, with post counts.">
+  <meta property="og:title" content="Tags | bensec">
+  <meta property="og:description" content="Every tag on the bensec blog, with post counts.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon.svg">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="now.html">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="tags-page">
+    <div class="blog-header">
+      <p class="section-label">// tags</p>
+      <h1>Every tag</h1>
+      <p>Sorted by post count. Click to filter on the blog.</p>
+    </div>
+
+    <div id="tags-cloud"><p class="dim">Loading…</p></div>
+    <div id="tags-groups"></div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="index.html">home</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-db.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/site-extras.js"></script>
+
+  <script>
+    (function () {
+      function escH(s) { return String(s).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+      function render() {
+        var posts = (window.BensecDB && BensecDB.getPosts) ? BensecDB.getPosts() : [];
+        posts = posts.filter(function (p) { return p.status !== 'draft'; });
+
+        var tagToPosts = {};
+        posts.forEach(function (p) {
+          (p.tags || []).forEach(function (t) {
+            if (!tagToPosts[t]) tagToPosts[t] = [];
+            tagToPosts[t].push(p);
+          });
+        });
+        var tags = Object.keys(tagToPosts).sort(function (a, b) {
+          return tagToPosts[b].length - tagToPosts[a].length || a.localeCompare(b);
+        });
+        var cloud = document.getElementById('tags-cloud');
+        var groups = document.getElementById('tags-groups');
+        if (!tags.length) { cloud.innerHTML = '<p class="dim">No tags yet.</p>'; return; }
+        var max = tagToPosts[tags[0]].length;
+        cloud.innerHTML = '<div class="tag-cloud">' + tags.map(function (t) {
+          var n = tagToPosts[t].length;
+          var size = 0.85 + (n / max) * 0.8; // em
+          return '<a class="tag-cloud-item" style="font-size:' + size.toFixed(2) + 'em;" href="#tag-' + encodeURIComponent(t) + '">' +
+            '#' + escH(t) + ' <span class="tag-cloud-n">' + n + '</span></a>';
+        }).join('') + '</div>';
+
+        groups.innerHTML = tags.map(function (t) {
+          return '<section class="tag-group" id="tag-' + escH(t) + '">' +
+            '<h2 class="tag-group-title">#' + escH(t) + ' <span class="tag-group-n">' + tagToPosts[t].length + '</span></h2>' +
+            '<ul class="archive-list">' +
+              tagToPosts[t].sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); }).map(function (p) {
+                return '<li><a class="archive-item" href="post.html?id=' + encodeURIComponent(p.id) + '">' +
+                  '<span class="archive-date">' + escH(p.date || '—') + '</span>' +
+                  '<span class="archive-title">' + escH(p.title || '(untitled)') + '</span>' +
+                '</a></li>';
+              }).join('') +
+            '</ul>' +
+          '</section>';
+        }).join('');
+      }
+      function poll(t) {
+        t = t || 0;
+        if (window.BensecDB && BensecDB.getPosts && BensecDB.getPosts().length) return render();
+        if (t > 60) return render();
+        setTimeout(function () { poll(t + 1); }, 200);
+      }
+      document.addEventListener('DOMContentLoaded', function () { poll(); });
+    }());
+  </script>
+</body>
+</html>

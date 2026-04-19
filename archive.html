@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archive | bensec</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="stylesheet" href="css/features-2.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00ff8c">
+  <meta name="description" content="All posts by Ben Hawarden, grouped by year and month.">
+  <meta property="og:title" content="Archive | bensec">
+  <meta property="og:description" content="All posts by Ben Hawarden, grouped by year and month.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon.svg">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="now.html">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="archive-page">
+    <div class="blog-header">
+      <p class="section-label">// archive</p>
+      <h1>All posts</h1>
+      <p>Everything, grouped by year.</p>
+    </div>
+
+    <div id="archive-list"><p class="dim">Loading…</p></div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="index.html">home</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-db.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/site-extras.js"></script>
+
+  <script>
+    (function () {
+      function escH(s) { return String(s).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+      function render() {
+        var posts = (window.BensecDB && BensecDB.getPosts) ? BensecDB.getPosts() : [];
+        posts = posts.filter(function (p) { return p.status !== 'draft'; });
+        posts.sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
+
+        var groups = {};
+        posts.forEach(function (p) {
+          var y = (p.date || '').slice(0, 4) || '????';
+          if (!groups[y]) groups[y] = [];
+          groups[y].push(p);
+        });
+        var years = Object.keys(groups).sort(function (a, b) { return b.localeCompare(a); });
+        var host = document.getElementById('archive-list');
+        if (!posts.length) { host.innerHTML = '<p class="dim">No posts yet.</p>'; return; }
+        host.innerHTML = years.map(function (y) {
+          return '<section class="archive-year">' +
+            '<h2 class="archive-year-title">' + y + ' <span class="archive-year-count">' + groups[y].length + '</span></h2>' +
+            '<ul class="archive-list">' +
+              groups[y].map(function (p) {
+                return '<li>' +
+                  '<a class="archive-item" href="post.html?id=' + encodeURIComponent(p.id) + '">' +
+                    '<span class="archive-date">' + escH((p.date || '').slice(5) || '—') + '</span>' +
+                    '<span class="archive-title">' + escH(p.title || '(untitled)') + '</span>' +
+                    '<span class="archive-tags">' + (p.tags || []).slice(0, 3).map(function (t) { return '#' + escH(t); }).join(' ') + '</span>' +
+                  '</a>' +
+                '</li>';
+              }).join('') +
+            '</ul>' +
+          '</section>';
+        }).join('');
+      }
+      function poll(t) {
+        t = t || 0;
+        if (window.BensecDB && BensecDB.getPosts && BensecDB.getPosts().length) return render();
+        if (t > 60) return render();
+        setTimeout(function () { poll(t + 1); }, 200);
+      }
+      document.addEventListener('DOMContentLoaded', function () { poll(); });
+    }());
+  </script>
+</body>
+</html>
