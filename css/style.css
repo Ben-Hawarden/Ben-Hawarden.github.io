@@ -2399,7 +2399,7 @@ textarea.editor-input {
 .blog-search-bar {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   margin: 1rem 0 1.25rem;
   position: relative;
 }
