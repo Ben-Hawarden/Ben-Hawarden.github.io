@@ -191,8 +191,8 @@
     }).catch(function () {});
   }
 
-  // ── feat: email notify strip on blog ──
-  function initEmailNotify() {
+  // ── feat: email notify strip — disabled ──
+  function initEmailNotify() { return;
     var target = document.getElementById('blog-notify-slot');
     if (!target) return;
 
