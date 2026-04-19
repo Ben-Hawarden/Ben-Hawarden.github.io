@@ -2383,49 +2383,38 @@ textarea.editor-input {
   border-color: rgba(0, 255, 140, 0.3);
 }
 
-/* Blog reader search bar — terminal prompt style */
+/* Blog reader search bar — subtle terminal style */
 .blog-search-bar {
   max-width: 720px;
-  margin: 1.75rem auto 1.25rem;
+  margin: 1.5rem auto 1.25rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background:
-    linear-gradient(180deg, rgba(0, 255, 140, 0.045), rgba(0, 255, 140, 0.02)),
-    rgba(10, 10, 10, 0.55);
-  border: 1px solid rgba(0, 255, 140, 0.22);
-  border-radius: 8px;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  box-shadow:
-    inset 0 1px 0 rgba(0, 255, 140, 0.06),
-    0 1px 2px rgba(0, 0, 0, 0.35);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  gap: 0.7rem;
+  padding: 0.6rem 0.95rem;
+  background: rgba(10, 10, 10, 0.35);
+  border: 1px solid rgba(0, 255, 140, 0.12);
+  border-radius: 6px;
+  transition: border-color 0.2s ease, background 0.2s ease;
   position: relative;
 }
 .blog-search-bar:hover {
-  border-color: rgba(0, 255, 140, 0.4);
+  border-color: rgba(0, 255, 140, 0.25);
 }
 .blog-search-bar:focus-within {
-  border-color: var(--green, #00ff8c);
-  box-shadow:
-    inset 0 1px 0 rgba(0, 255, 140, 0.12),
-    0 0 0 3px rgba(0, 255, 140, 0.12),
-    0 0 18px rgba(0, 255, 140, 0.18);
+  border-color: rgba(0, 255, 140, 0.45);
+  background: rgba(10, 10, 10, 0.5);
 }
 .blog-search-bar::before {
   content: '$';
-  color: var(--green, #00ff8c);
+  color: rgba(0, 255, 140, 0.55);
   font-family: 'Fira Code', monospace;
-  font-weight: 700;
-  font-size: 16px;
-  opacity: 0.85;
+  font-weight: 600;
+  font-size: 14px;
   user-select: none;
 }
-.blog-search-icon {
-  display: none; /* replaced by the $ prompt */
-}
+.blog-search-icon { display: none; }
+.blog-search-caret { display: none; }
+
 #blog-search {
   flex: 1;
   background: transparent;
@@ -2433,88 +2422,60 @@ textarea.editor-input {
   outline: none;
   color: var(--text, #e6edf3);
   font-family: 'Fira Code', monospace;
-  font-size: 14px;
-  letter-spacing: 0.2px;
+  font-size: 13px;
   caret-color: var(--green, #00ff8c);
 }
 #blog-search::placeholder {
-  color: rgba(230, 237, 243, 0.35);
+  color: rgba(230, 237, 243, 0.3);
   font-family: 'Fira Code', monospace;
-  font-style: italic;
 }
-/* Blinking caret hint when empty + unfocused */
-#blog-search:placeholder-shown:not(:focus) + .blog-search-caret {
-  opacity: 1;
-  animation: blogSearchBlink 1.1s steps(2, end) infinite;
-}
-.blog-search-caret {
-  width: 8px;
-  height: 16px;
-  background: var(--green, #00ff8c);
-  opacity: 0;
-  border-radius: 1px;
-  margin-left: -4px;
-  transition: opacity 0.15s ease;
-  box-shadow: 0 0 6px rgba(0, 255, 140, 0.55);
-}
-@keyframes blogSearchBlink {
-  0%, 49%   { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-/* Keyboard shortcut hint on the right */
 .blog-search-kbd {
   font-family: 'Fira Code', monospace;
   font-size: 10px;
-  padding: 3px 7px;
-  border: 1px solid rgba(0, 255, 140, 0.28);
-  border-bottom-width: 2px;
-  border-radius: 4px;
-  color: rgba(0, 255, 140, 0.8);
-  background: rgba(0, 0, 0, 0.35);
-  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border: 1px solid rgba(0, 255, 140, 0.18);
+  border-radius: 3px;
+  color: rgba(0, 255, 140, 0.55);
+  background: rgba(0, 0, 0, 0.25);
   user-select: none;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity 0.15s ease;
 }
 .blog-search-bar:focus-within .blog-search-kbd {
   opacity: 0;
-  transform: translateX(6px) scale(0.9);
   pointer-events: none;
 }
 #blog-search-clear {
   background: transparent;
-  border: 1px solid transparent;
-  color: rgba(230, 237, 243, 0.5);
+  border: none;
+  color: rgba(230, 237, 243, 0.4);
   cursor: pointer;
   font-size: 12px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 #blog-search-clear:hover {
   color: var(--green, #00ff8c);
-  background: rgba(0, 255, 140, 0.1);
-  border-color: rgba(0, 255, 140, 0.4);
-  transform: scale(1.1);
+  background: rgba(0, 255, 140, 0.08);
 }
-/* Result count badge (optional — shown when search is active) */
 .blog-search-count {
   font-family: 'Fira Code', monospace;
   font-size: 11px;
-  color: var(--green, #00ff8c);
+  color: rgba(0, 255, 140, 0.65);
   opacity: 0;
   transition: opacity 0.2s ease;
   white-space: nowrap;
   user-select: none;
 }
-.blog-search-bar.has-query .blog-search-count { opacity: 0.8; }
+.blog-search-bar.has-query .blog-search-count { opacity: 0.75; }
 
 @media (max-width: 560px) {
-  .blog-search-bar { padding: 0.6rem 0.8rem; gap: 0.5rem; }
+  .blog-search-bar { padding: 0.5rem 0.75rem; gap: 0.5rem; }
   .blog-search-kbd { display: none; }
 }
 
