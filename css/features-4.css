@@ -99,13 +99,16 @@ mark.post-search-hl.current {
 .post-sidebar-toc {
   display: none;
 }
-@media (min-width: 1300px) {
+/* Only show when the viewport is wide enough that the sidebar
+   doesn't overlap the article (article max-width ~960px, need
+   960px + 2×200px + 2×40px padding = ~1440px minimum) */
+@media (min-width: 1440px) {
   .post-sidebar-toc {
     display: block;
     position: fixed;
     top: 90px;
-    left: max(1rem, calc(50% + 520px + 16px));
-    width: 200px;
+    right: 24px;
+    width: 190px;
     background: var(--bg-raised, rgba(10,10,10,0.92));
     border: 1px solid var(--accent-border, rgba(0,255,140,0.15));
     border-radius: 6px;
@@ -125,24 +128,46 @@ mark.post-search-hl.current {
   margin: 0 0 8px;
   text-transform: uppercase;
   white-space: nowrap;
+  overflow: hidden;
 }
 .toc-sb-item {
-  display: block;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
   font-size: 12px;
   color: var(--text-dim, rgba(230,237,243,0.65));
   text-decoration: none;
-  padding: 4px 0 4px 10px;
-  border-left: 2px solid transparent;
-  line-height: 1.5;
-  transition: color 0.15s, border-color 0.15s;
-  word-break: break-word;
+  padding: 4px 0;
+  border-left: none;
+  line-height: 1.4;
+  transition: color 0.15s;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
 }
-.toc-sb-item.toc-sb-h3 { padding-left: 20px; font-size: 11px; }
+.toc-sb-item::before {
+  content: '›';
+  color: var(--accent, #00ff8c);
+  opacity: 0.5;
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 1;
+  transition: opacity 0.15s;
+}
+.toc-sb-item.toc-sb-h3 {
+  padding-left: 12px;
+  font-size: 11px;
+}
+.toc-sb-item.toc-sb-h3::before {
+  content: '·';
+  font-size: 12px;
+}
 .toc-sb-item.active {
   color: var(--green, #00ff8c);
-  border-left-color: var(--green, #00ff8c);
 }
+.toc-sb-item.active::before { opacity: 1; }
 .toc-sb-item:hover { color: var(--green, #00ff8c); }
+.toc-sb-item:hover::before { opacity: 1; }
 
 /* ── feat: copy-link on headings ── */
 .heading-anchor {
