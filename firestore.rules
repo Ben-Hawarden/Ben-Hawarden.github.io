@@ -31,6 +31,24 @@ service cloud.firestore {
       allow write: if true;
     }
 
+    // Reactions — public read/write (emoji counts, sessionStorage throttled client-side).
+    match /reactions/{postId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Upvotes — public read/write (sessionStorage throttled client-side).
+    match /upvotes/{postId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Machines tracker — public read, admin write.
+    match /machines/{machineId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Everything else: deny
     match /{document=**} {
       allow read, write: if false;

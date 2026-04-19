@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/machines | bensec</title>
+  <meta name="description" content="Ben Hawarden's HTB and TryHackMe machine tracker — pwned machines, difficulties, and writeup links.">
+  <meta name="color-scheme" content="dark light">
+  <link rel="canonical" href="https://bensec.dev/machines.html">
+  <meta property="og:title" content="/machines | bensec">
+  <meta property="og:description" content="HTB and TryHackMe machine tracker.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon.svg">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="stylesheet" href="css/features-2.css">
+  <link rel="stylesheet" href="css/features-3.css">
+  <link rel="stylesheet" href="css/features-4.css">
+  <link rel="stylesheet" href="css/features-5.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00ff8c">
+  <!-- feat:head -->
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a><!-- feat:skip -->
+
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="page-transition"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="uses.html">uses</a></li>
+        <li><a href="now.html">achievements</a></li>
+        <li><a href="machines.html" class="active-link">machines</a></li>
+        <li><a href="index.html#contact">contact</a></li>
+        <li><button class="cmd-palette-hint" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{ctrlKey:true,key:'k',bubbles:true}))" aria-label="Open command palette" title="Command palette (Ctrl+K)">⌘K</button>
+        <button class="theme-toggle" aria-label="Toggle theme">◐</button></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="theme-toggle" aria-label="Toggle theme">◐</button>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="page-title reveal">
+    <h1>/machines</h1>
+    <p>HTB and TryHackMe machines I've worked through. Pwned, in progress, and on the list.</p>
+  </div>
+
+  <section id="main" class="section">
+
+    <!-- Stats bar -->
+    <div class="machines-stats reveal" id="machines-stats">
+      <div class="ms-item"><div class="ms-num" id="stat-total">0</div><div class="ms-label">total</div></div>
+      <div class="ms-item"><div class="ms-num" id="stat-pwned">0</div><div class="ms-label">pwned</div></div>
+      <div class="ms-item"><div class="ms-num" id="stat-htb">0</div><div class="ms-label">htb</div></div>
+      <div class="ms-item"><div class="ms-num" id="stat-thm">0</div><div class="ms-label">thm</div></div>
+      <div class="ms-item"><div class="ms-num" id="stat-easy" style="color:#00ff8c">0</div><div class="ms-label">easy</div></div>
+      <div class="ms-item"><div class="ms-num" id="stat-medium" style="color:#ffa500">0</div><div class="ms-label">medium</div></div>
+      <div class="ms-item"><div class="ms-num" id="stat-hard" style="color:#ff4444">0</div><div class="ms-label">hard</div></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="machines-filters reveal">
+      <button class="machine-filter-btn active" data-filter="all">all</button>
+      <button class="machine-filter-btn" data-filter="htb">htb</button>
+      <button class="machine-filter-btn" data-filter="thm">thm</button>
+      <button class="machine-filter-btn" data-filter="pwned">✔ pwned</button>
+      <button class="machine-filter-btn" data-filter="easy">easy</button>
+      <button class="machine-filter-btn" data-filter="medium">medium</button>
+      <button class="machine-filter-btn" data-filter="hard">hard</button>
+      <button class="machine-filter-btn" data-filter="insane">insane</button>
+    </div>
+
+    <!-- Grid -->
+    <div class="machines-grid reveal" id="machines-grid">
+      <div class="machines-empty" id="machines-loading">// loading machines...</div>
+    </div>
+
+  </section>
+
+  <!-- Add machine modal (admin only, shown after auth check) -->
+  <div id="machine-modal-overlay">
+    <div id="machine-modal">
+      <h2>// add machine</h2>
+      <div class="machine-form-grid">
+        <div>
+          <div class="machine-form-label">Name *</div>
+          <input type="text" id="mc-name" placeholder="e.g. Lame">
+        </div>
+        <div>
+          <div class="machine-form-label">Platform *</div>
+          <select id="mc-platform">
+            <option value="htb">HTB</option>
+            <option value="thm">THM</option>
+          </select>
+        </div>
+        <div>
+          <div class="machine-form-label">Difficulty</div>
+          <select id="mc-diff">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+            <option value="insane">Insane</option>
+          </select>
+        </div>
+        <div>
+          <div class="machine-form-label">OS</div>
+          <select id="mc-os">
+            <option value="linux">Linux</option>
+            <option value="windows">Windows</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div>
+          <div class="machine-form-label">Status</div>
+          <select id="mc-status">
+            <option value="pwned">Pwned</option>
+            <option value="user">User only</option>
+            <option value="todo">Todo</option>
+          </select>
+        </div>
+        <div>
+          <div class="machine-form-label">Writeup post ID</div>
+          <input type="text" id="mc-writeup" placeholder="post id (optional)">
+        </div>
+        <div class="full">
+          <div class="machine-form-label">Tags (comma separated)</div>
+          <input type="text" id="mc-tags" placeholder="e.g. web,privesc,smb">
+        </div>
+        <div class="full">
+          <div class="machine-form-label">Notes</div>
+          <input type="text" id="mc-notes" placeholder="brief notes (optional)">
+        </div>
+      </div>
+      <div class="machine-modal-actions">
+        <button class="mma-cancel" id="mc-cancel">cancel</button>
+        <button class="mma-save" id="mc-save">+ add machine</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ben-hawarden-8a0a98a1/" target="_blank" rel="noopener">linkedin</a>
+        <a href="admin.html">admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-db.js"></script>
+  <script src="js/machines.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/site-extras.js"></script>
+  <script src="js/fun-extras.js"></script>
+  <script src="js/command-palette.js"></script>
+  <script src="js/site-analytics.js"></script>
+  <script src="js/site-features.js"></script>
+</body>
+</html>
