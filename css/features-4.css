@@ -108,7 +108,7 @@ mark.post-search-hl.current {
     position: fixed;
     top: 90px;
     right: 24px;
-    width: 190px;
+    width: 230px;
     background: var(--bg-raised, rgba(10,10,10,0.92));
     border: 1px solid var(--accent-border, rgba(0,255,140,0.15));
     border-radius: 6px;
