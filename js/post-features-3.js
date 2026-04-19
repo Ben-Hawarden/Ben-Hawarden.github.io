@@ -32,8 +32,8 @@
     }, { passive: true });
   }
 
-  // ── feat: "jump to writeup" button ──
-  function initJumpToWriteup() {
+  // ── feat: "jump to writeup" button — disabled ──
+  function initJumpToWriteup() { return;
     var body = document.getElementById('post-body-content');
     if (!body) return;
     var headings = Array.from(body.querySelectorAll('h2, h3'));
