@@ -15,10 +15,14 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ben Hawarden | Cyber Security">
   <meta name="twitter:description" content="Breaking, building, and securing systems. Top 2% on TryHackMe.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/features.css">
   <link rel="stylesheet" href="css/features-2.css">
+  <link rel="stylesheet" href="css/features-3.css">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#00ff8c">
   <meta name="description" content="Ben Hawarden — cybersecurity portfolio, blog, projects, and cheatsheets.">
@@ -151,6 +155,7 @@
         <li><a href="now.html">achievements</a></li>
       </ul>
       <div class="mobile-controls">
+        <button class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">◑</button>
         <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
       </div>
     </nav>
@@ -163,9 +168,7 @@
       <p class="hero-pre"><span class="typing" data-text="$ whoami"></span></p>
       <h1 class="reveal">Ben Hawarden</h1>
       <p class="hero-sub reveal">
-        <span class="hero-role">Cyber Security Student</span>
-        <span class="hero-separator">|</span>
-        <span class="hero-role-dim">CTF Player</span>
+        <span id="hero-typewriter" data-lines="Cyber Security Student|CTF Player|Penetration Tester|HTB Pro Hacker|Bug Hunter">Cyber Security Student</span>
       </p>
       <div class="status-indicator reveal" id="hero-status" style="display:none;">
         <span class="status-dot"></span>
@@ -247,5 +250,6 @@
   <script src="js/blog-engine.js"></script>
   <script src="js/skeleton-loaders.js"></script>
   <script src="js/site-extras.js"></script>
+  <script src="js/fun-extras.js"></script>
 </body>
 </html>

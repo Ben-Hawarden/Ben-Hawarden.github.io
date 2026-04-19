@@ -3,27 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 | bensec</title>
+  <title>404 — segfault | bensec</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/features.css">
   <link rel="stylesheet" href="css/features-2.css">
+  <link rel="stylesheet" href="css/features-3.css">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#00ff8c">
   <meta name="description" content="404 — page not found.">
-  <meta property="og:title" content="404 | bensec">
-  <meta property="og:description" content="404 — page not found.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="/icon.svg">
-  <meta name="twitter:card" content="summary">
-  <!-- feat:head -->
 </head>
 <body>
-  <a href="#main" class="skip-link">Skip to content</a><!-- feat:skip -->
+  <a href="#main" class="skip-link">Skip to content</a>
 
   <canvas id="matrix-bg"></canvas>
   <div class="scanlines"></div>
-  <div class="page-transition"></div>
 
   <header>
     <nav>
@@ -38,36 +35,65 @@
         <li><a href="now.html">achievements</a></li>
       </ul>
       <div class="mobile-controls">
+        <button class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">◑</button>
         <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
       </div>
     </nav>
   </header>
 
-  <div class="error-page">
-    <pre class="error-ascii">
-     _  _    ___  _  _
-    | || |  / _ \| || |
-    | || |_| | | | || |_
-    |__   _| | | |__   _|
-       | | | |_| |  | |
-       |_|  \___/   |_|
-    </pre>
-    <p class="error-code">404</p>
-    <p class="error-msg">bash: page: command not found</p>
-    <p class="error-detail">The page you're looking for doesn't exist, has been moved, or was never here to begin with.</p>
-    <a href="index.html" class="error-home">cd ~</a>
-  </div>
+  <main id="main" class="error-page-v2">
+    <div class="error-terminal">
+      <div class="error-term-bar">
+        <span class="error-dot red"></span>
+        <span class="error-dot amber"></span>
+        <span class="error-dot green"></span>
+        <span class="error-term-title">bash — bensec</span>
+      </div>
+      <div class="error-term-body">
+        <p class="error-line">$ <span id="error-cmd" class="error-typewriter"></span><span class="error-cursor">▋</span></p>
+        <p class="error-line error-output">bash: <span id="error-path" class="error-path"></span>: command not found</p>
+        <p class="error-line"><span class="error-green">root@bensec</span>:<span class="error-blue">~</span>$ <span class="error-dim">kill -9 404</span></p>
+        <p class="error-line error-output error-dim">-bash: 404: no such process</p>
+        <p class="error-line"><span class="error-green">root@bensec</span>:<span class="error-blue">~</span>$ <span class="error-dim">cd ~</span></p>
+      </div>
+      <div class="error-404-big">404</div>
+      <div class="error-actions">
+        <a href="index.html" class="admin-btn success">cd ~</a>
+        <a href="blog.html" class="admin-btn">cat blog.html</a>
+        <a href="javascript:history.back()" class="admin-btn">↩ back</a>
+      </div>
+    </div>
+  </main>
 
   <footer>
-    <p>&copy; 2026 Ben Hawarden</p>
-  </footer>  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js"></script>
-  <script src="js/firebase-db.js"></script>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="index.html">home</a>
+      </div>
+    </div>
+  </footer>
 
   <script src="js/script.js"></script>
-  <script src="js/site-extras.js"></script>
+  <script src="js/fun-extras.js"></script>
+  <script>
+    // Typewriter the path that 404'd
+    var path = decodeURIComponent(location.pathname.replace(/^\//,'') || 'this-page');
+    var cmdEl = document.getElementById('error-cmd');
+    var pathEl = document.getElementById('error-path');
+    if (pathEl) pathEl.textContent = path;
+    if (cmdEl) {
+      var str = 'cat ' + path;
+      var i = 0;
+      var cursor = document.querySelector('.error-cursor');
+      function type() {
+        cmdEl.textContent = str.slice(0, ++i);
+        if (i < str.length) setTimeout(type, 65);
+        else { if (cursor) cursor.classList.add('done'); }
+      }
+      setTimeout(type, 400);
+    }
+  </script>
 </body>
 </html>

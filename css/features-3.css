@@ -1,0 +1,359 @@
+/* ─────────────────────────────────────────────
+   features-3.css — Batch 3 styles
+   ───────────────────────────────────────────── */
+
+/* ── Fira Code for the whole site ── */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap');
+
+/* ── feat: prefers-reduced-motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── feat: dark/light theme toggle button ── */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 140, 0.25);
+  color: rgba(0, 255, 140, 0.75);
+  font-size: 14px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+  margin-right: 0.4rem;
+}
+.theme-toggle:hover {
+  background: rgba(0, 255, 140, 0.1);
+  border-color: var(--green, #00ff8c);
+  color: var(--green, #00ff8c);
+  transform: rotate(20deg);
+}
+[data-theme="light"] .theme-toggle { border-color: rgba(0,0,0,0.25); color: #333; }
+
+/* ── Light theme vars ── */
+[data-theme="light"] {
+  --bg: #f8fafb;
+  --bg-raised: #ffffff;
+  --bg-card: #ffffff;
+  --bg-code: #f0f4f8;
+  --text: #1a2332;
+  --text-dim: #5a6a7a;
+  --text-heading: #0a1628;
+  --green: #0a7c44;
+  --border: #d0dae6;
+  --border-light: #e4ecf4;
+}
+[data-theme="light"] .scanlines { display: none; }
+[data-theme="light"] canvas#matrix-bg { display: none; }
+
+/* ── feat: share button on posts ── */
+.post-share-btn {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 140, 0.25);
+  color: rgba(0, 255, 140, 0.85);
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  white-space: nowrap;
+}
+.post-share-btn:hover {
+  background: rgba(0, 255, 140, 0.1);
+  border-color: var(--green, #00ff8c);
+  transform: translateY(-1px);
+}
+
+/* ── feat: last-read dim ── */
+.post-read { opacity: 0.6; }
+.post-read:hover { opacity: 1; transition: opacity 0.15s; }
+.post-read::after {
+  content: '✓ read';
+  position: absolute; top: 0.5rem; right: 0.5rem;
+  font-family: monospace; font-size: 10px;
+  color: var(--green, #00ff8c); opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ── feat: bulk actions bar ── */
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: rgba(0, 255, 140, 0.08);
+  border: 1px solid rgba(0, 255, 140, 0.3);
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.bulk-count {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--green, #00ff8c);
+  margin-right: 0.5rem;
+  font-weight: 600;
+}
+.bulk-checkbox {
+  width: 15px; height: 15px;
+  accent-color: var(--green, #00ff8c);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+/* ── feat: version history modal ── */
+.history-modal-content {
+  max-width: 560px;
+  width: 90vw;
+}
+.history-list {
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.history-item {
+  border: 1px solid rgba(0, 255, 140, 0.2);
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 255, 140, 0.03);
+}
+.history-item-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 130px;
+}
+.history-ts { font-family: monospace; font-size: 11px; opacity: 0.8; }
+.history-wc { font-family: monospace; font-size: 10px; color: var(--green, #00ff8c); opacity: 0.7; }
+.history-title { flex: 1; font-size: 13px; font-weight: 500; }
+
+/* ── feat: scheduling option ── */
+#schedule-hint { font-size: 11px; }
+
+/* ── feat: drag-to-reorder ── */
+[draggable="true"] { cursor: grab; user-select: none; }
+[draggable="true"]:active { cursor: grabbing; }
+.dragging { opacity: 0.4; }
+.drag-over { outline: 2px dashed var(--green, #00ff8c); outline-offset: 2px; }
+
+/* ── feat: analytics tab styles ── */
+.analytics-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.analytics-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid rgba(0, 255, 140, 0.2);
+  border-radius: 6px;
+  background: rgba(0, 255, 140, 0.03);
+}
+.analytics-n {
+  font-family: 'Fira Code', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--green, #00ff8c);
+  line-height: 1;
+}
+.analytics-label {
+  font-family: monospace;
+  font-size: 11px;
+  opacity: 0.65;
+  margin-top: 4px;
+  text-align: center;
+}
+.analytics-section-title {
+  font-family: monospace;
+  color: var(--green, #00ff8c);
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin: 1.5rem 0 0.75rem;
+}
+.analytics-posts-list { display: flex; flex-direction: column; gap: 6px; }
+.analytics-post-row {
+  display: grid;
+  grid-template-columns: 24px 1fr 120px 48px;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 13px;
+}
+.analytics-rank { font-family: monospace; font-size: 11px; opacity: 0.5; text-align: right; }
+.analytics-post-title { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.analytics-bar-wrap { height: 4px; background: rgba(0,255,140,0.1); border-radius: 2px; overflow: hidden; }
+.analytics-bar { height: 100%; background: var(--green, #00ff8c); border-radius: 2px; transition: width 0.5s ease; }
+.analytics-views { font-family: monospace; font-size: 12px; color: var(--green, #00ff8c); text-align: right; }
+.analytics-tag-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+.analytics-tag-chip {
+  font-family: monospace; font-size: 12px;
+  padding: 3px 8px; border-radius: 3px;
+  background: rgba(0,255,140,0.08);
+  border: 1px solid rgba(0,255,140,0.2);
+  color: var(--green, #00ff8c);
+}
+.analytics-tag-n { opacity: 0.65; margin-left: 3px; }
+.analytics-loading { padding: 2rem; }
+
+/* ── feat: Konami Easter egg terminal ── */
+.easter-term {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  width: 560px; max-width: calc(100vw - 2rem);
+  background: #0a0a0a;
+  border: 1px solid var(--green, #00ff8c);
+  border-radius: 8px;
+  box-shadow: 0 0 40px rgba(0,255,140,0.25), 0 20px 40px rgba(0,0,0,0.7);
+  z-index: 9999;
+  font-family: 'Fira Code', monospace;
+  overflow: hidden;
+  animation: termSlideIn 0.25s ease;
+}
+@keyframes termSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.easter-term-bar {
+  background: rgba(0,255,140,0.08);
+  border-bottom: 1px solid rgba(0,255,140,0.2);
+  padding: 8px 12px;
+  display: flex; align-items: center; gap: 6px;
+}
+.easter-term-title { flex:1; font-size: 12px; opacity: 0.7; }
+.easter-term-close {
+  background: transparent; border: none;
+  color: rgba(230,237,243,0.5); cursor: pointer; font-size: 14px;
+  padding: 0 4px; transition: color 0.15s;
+}
+.easter-term-close:hover { color: var(--green, #00ff8c); }
+.easter-term-body {
+  padding: 10px 14px;
+  min-height: 180px; max-height: 260px;
+  overflow-y: auto;
+  font-size: 13px; line-height: 1.6;
+}
+.et-line { margin: 0; white-space: pre-wrap; word-break: break-all; }
+.et-green { color: var(--green, #00ff8c); }
+.et-err   { color: #ff6b6b; }
+.dim.et-line { opacity: 0.65; }
+.easter-term-input-row {
+  display: flex; align-items: center;
+  padding: 8px 14px;
+  border-top: 1px solid rgba(0,255,140,0.15);
+  gap: 4px;
+}
+.easter-term-prompt { color: var(--green, #00ff8c); font-size: 13px; white-space: nowrap; }
+#easter-term-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: #e6edf3; font-family: 'Fira Code', monospace; font-size: 13px;
+  caret-color: var(--green, #00ff8c);
+}
+
+/* ── feat: typewriter hero subtitle ── */
+#hero-typewriter {
+  display: inline-block;
+  border-right: 2px solid var(--green, #00ff8c);
+  padding-right: 2px;
+  animation: twCaret 0.9s steps(2, end) infinite;
+  min-height: 1.2em;
+}
+@keyframes twCaret {
+  0%, 49%  { border-right-color: var(--green, #00ff8c); }
+  50%, 100% { border-right-color: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #hero-typewriter { animation: none; border-right-color: transparent; }
+}
+
+/* ── feat: status timer ── */
+.status-timer {
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+/* ── feat: 404 page upgrade ── */
+.error-page-v2 {
+  display: flex; align-items: center; justify-content: center;
+  min-height: calc(100vh - 120px);
+  padding: 2rem;
+}
+.error-terminal {
+  width: 100%; max-width: 600px;
+  background: #050505;
+  border: 1px solid rgba(0,255,140,0.35);
+  border-radius: 10px;
+  box-shadow: 0 0 50px rgba(0,255,140,0.15), 0 20px 60px rgba(0,0,0,0.6);
+  overflow: hidden;
+}
+.error-term-bar {
+  background: #0f0f0f;
+  border-bottom: 1px solid rgba(0,255,140,0.15);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 7px;
+}
+.error-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+}
+.error-dot.red   { background: #ff5f57; }
+.error-dot.amber { background: #ffbd2e; }
+.error-dot.green { background: #28ca42; }
+.error-term-title {
+  flex: 1; text-align: center; font-family: monospace; font-size: 12px; opacity: 0.6;
+}
+.error-term-body {
+  padding: 1.25rem 1.5rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 13px; line-height: 1.8;
+}
+.error-line { margin: 0; }
+.error-output { opacity: 0.85; margin-left: 0; padding-left: 0; }
+.error-green { color: #00ff8c; }
+.error-blue  { color: #4f8fff; }
+.error-dim   { opacity: 0.6; }
+.error-path  { color: #ff6b6b; }
+.error-cursor {
+  display: inline-block; color: var(--green, #00ff8c);
+  animation: termBlink 1s steps(2,end) infinite;
+}
+.error-cursor.done { animation: none; opacity: 0; }
+@keyframes termBlink { 0%,49% { opacity:1; } 50%,100% { opacity:0; } }
+.error-typewriter { color: var(--text, #e6edf3); }
+.error-404-big {
+  font-family: 'Fira Code', monospace;
+  font-size: clamp(60px, 15vw, 120px);
+  font-weight: 700;
+  color: var(--green, #00ff8c);
+  opacity: 0.12;
+  text-align: right;
+  padding: 0 1.5rem;
+  line-height: 1;
+  margin-top: -1rem;
+  letter-spacing: -4px;
+  user-select: none;
+}
+.error-actions {
+  display: flex; gap: 0.75rem; flex-wrap: wrap;
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .easter-term { bottom: 0; right: 0; width: 100%; border-radius: 8px 8px 0 0; }
+  .error-page-v2 { padding: 1rem; }
+}
