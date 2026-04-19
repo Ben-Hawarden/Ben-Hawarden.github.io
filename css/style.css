@@ -2456,8 +2456,9 @@ textarea.editor-input {
   font-size: 14px;
   user-select: none;
 }
-.blog-search-icon { display: none; }
-.blog-search-caret { display: none; }
+.blog-search-icon,
+.blog-search-caret,
+.blog-search-kbd { display: none !important; }
 
 #blog-search {
   flex: 1;
@@ -2468,25 +2469,11 @@ textarea.editor-input {
   font-family: 'Fira Code', monospace;
   font-size: 13px;
   caret-color: var(--green, #00ff8c);
+  padding: 0;
 }
 #blog-search::placeholder {
   color: rgba(230, 237, 243, 0.3);
   font-family: 'Fira Code', monospace;
-}
-.blog-search-kbd {
-  font-family: 'Fira Code', monospace;
-  font-size: 10px;
-  padding: 2px 6px;
-  border: 1px solid rgba(0, 255, 140, 0.18);
-  border-radius: 3px;
-  color: rgba(0, 255, 140, 0.55);
-  background: rgba(0, 0, 0, 0.25);
-  user-select: none;
-  transition: opacity 0.15s ease;
-}
-.blog-search-bar:focus-within .blog-search-kbd {
-  opacity: 0;
-  pointer-events: none;
 }
 #blog-search-clear {
   background: transparent;
