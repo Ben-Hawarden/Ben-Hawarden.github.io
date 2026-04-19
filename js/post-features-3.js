@@ -75,8 +75,8 @@
     });
   }
 
-  // ── feat: copy-as-markdown button ──
-  function initCopyMarkdown() {
+  // ── feat: copy-as-markdown button — disabled ──
+  function initCopyMarkdown() { return;
     var body = document.getElementById('post-body-content');
     var hero = document.querySelector('.post-hero');
     if (!body || !hero || hero.querySelector('.copy-md-btn')) return;
