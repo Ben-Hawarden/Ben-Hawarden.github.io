@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/features.css">
   <link rel="stylesheet" href="css/features-2.css">
   <link rel="stylesheet" href="css/features-3.css">
+  <link rel="stylesheet" href="css/features-4.css">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#00ff8c">
   <meta name="description" content="Admin panel.">
@@ -41,6 +42,7 @@
         <li><a href="now.html">achievements</a></li>
       </ul>
       <div class="mobile-controls">
+        <button class="cmd-palette-hint" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{ctrlKey:true,key:'k',bubbles:true}))" aria-label="Open command palette" title="Command palette (Ctrl+K)">⌘K</button>
         <button class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">◑</button>
         <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
       </div>
@@ -314,5 +316,8 @@ code block
   <script src="js/admin-extras-2.js"></script>
   <script src="js/fun-extras.js"></script>
   <script src="js/admin-extras-3.js"></script>
+  <script src="js/command-palette.js"></script>
+  <script src="js/site-analytics.js"></script>
+  <script src="js/admin-extras-4.js"></script>
 </body>
 </html>

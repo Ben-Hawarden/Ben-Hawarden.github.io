@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="css/features.css">
   <link rel="stylesheet" href="css/features-2.css">
   <link rel="stylesheet" href="css/features-3.css">
+  <link rel="stylesheet" href="css/features-4.css">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#00ff8c">
   <meta name="description" content="The hardware, software, and tools Ben Hawarden uses day-to-day.">
@@ -47,7 +48,8 @@
         <li><a href="uses.html" class="active-link">uses</a></li>
         <li><a href="now.html">achievements</a></li>
         <li><a href="index.html#contact">contact</a></li>
-        <li><button class="theme-toggle" aria-label="Toggle theme">◐</button></li>
+        <li><button class="cmd-palette-hint" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{ctrlKey:true,key:'k',bubbles:true}))" aria-label="Open command palette" title="Command palette (Ctrl+K)">⌘K</button>
+        <button class="theme-toggle" aria-label="Toggle theme">◐</button></li>
       </ul>
       <div class="mobile-controls">
         <button class="theme-toggle" aria-label="Toggle theme">◐</button>
@@ -212,5 +214,7 @@
   <script src="js/script.js"></script>
   <script src="js/site-extras.js"></script>
   <script src="js/fun-extras.js"></script>
+  <script src="js/command-palette.js"></script>
+  <script src="js/site-analytics.js"></script>
 </body>
 </html>
