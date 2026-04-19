@@ -8,8 +8,8 @@
   var qs = new URLSearchParams(location.search);
   var postId = qs.get('id');
 
-  // ── feat: scroll time left in TOC ──
-  function initTocScrollTime() {
+  // ── feat: scroll time left in TOC — disabled ──
+  function initTocScrollTime() { return;
     var tocLabel = document.querySelector('.toc-sidebar-label');
     if (!tocLabel) return;
     var body = document.getElementById('post-body-content');
