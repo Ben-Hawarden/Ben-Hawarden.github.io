@@ -1,5 +1,6 @@
 // ── Admin extras 6 ──
 // feat: autosave, save-in-place button, Ctrl+S saves without closing editor
+// feat: code block folding in the editor textarea
 (function () {
   'use strict';
 
@@ -30,7 +31,7 @@
     return Math.round(s / 60) + 'm ago';
   }
 
-  // ── Core save ──
+  // ── Core save (auto-unfolds code blocks first) ──
   function saveNow(silent) {
     if (!window._adminSaveInPlace) return;
     var editorEl = document.getElementById('post-editor');
@@ -41,6 +42,9 @@
       if (!silent) setStatus('title required', 'status-error');
       return;
     }
+
+    // Always unfold before saving so real code is stored
+    unfoldAll(true);
 
     if (saveBtn) {
       saveBtn.disabled = true;
@@ -72,7 +76,6 @@
       isDirty = true;
       setStatus('unsaved changes', 'status-dirty');
     }
-    // Reset autosave countdown
     clearTimeout(autosaveTimer);
     autosaveTimer = setTimeout(function () { saveNow(true); }, AUTOSAVE_INTERVAL);
   }
@@ -101,13 +104,182 @@
     saveBtn.title = 'Save draft (Ctrl+S)';
     saveBtn.addEventListener('click', function () { saveNow(false); });
 
-    // Insert as first item in header-actions (before the status span)
     var statusEl = headerActions.querySelector('#autosave-status');
     if (statusEl) {
       headerActions.insertBefore(saveBtn, statusEl);
     } else {
       headerActions.insertBefore(saveBtn, headerActions.firstChild);
     }
+  }
+
+  // ══════════════════════════════════
+  //  CODE BLOCK FOLDING
+  // ══════════════════════════════════
+
+  var foldedBlocks = {};   // index → { lang, code }
+  var foldActive   = false;
+
+  var TOKEN_RE = /^\[\[cb:(\d+):?([^\]]*)\]\]$/;
+
+  function tokenFor(i, lang) {
+    return '[[cb:' + i + (lang ? ':' + lang : '') + ']]';
+  }
+
+  // Parse textarea for fenced code blocks
+  function parseBlocks(text) {
+    var blocks = [];
+    var re = /```([^\n`]*)\n([\s\S]*?)```/g;
+    var match;
+    while ((match = re.exec(text)) !== null) {
+      blocks.push({
+        full:  match[0],
+        lang:  (match[1] || '').trim(),
+        code:  match[2],
+        start: match.index,
+        end:   re.lastIndex
+      });
+    }
+    return blocks;
+  }
+
+  function foldAll() {
+    var textarea = document.getElementById('editor-body');
+    if (!textarea) return;
+
+    // Clear previous fold state
+    foldedBlocks = {};
+    var text = textarea.value;
+    var blocks = parseBlocks(text);
+    if (!blocks.length) return;
+
+    // Replace from end to start so indices don't shift
+    for (var i = blocks.length - 1; i >= 0; i--) {
+      var b = blocks[i];
+      foldedBlocks[i] = { lang: b.lang, code: b.code, full: b.full };
+      text = text.slice(0, b.start) + tokenFor(i, b.lang) + text.slice(b.end);
+    }
+
+    textarea.value = text;
+    foldActive = true;
+    renderFoldPanel();
+    updateFoldBtn();
+  }
+
+  function unfoldAll(silent) {
+    if (!foldActive && !silent) return;
+    var textarea = document.getElementById('editor-body');
+    if (!textarea) return;
+
+    var text = textarea.value;
+    // Replace tokens with real code (in any order — use global replace)
+    text = text.replace(/\[\[cb:(\d+):?([^\]]*)\]\]/g, function (_, idx) {
+      var b = foldedBlocks[parseInt(idx, 10)];
+      return b ? b.full : _;
+    });
+
+    textarea.value = text;
+    foldActive = false;
+    foldedBlocks = {};
+    removeFoldPanel();
+    updateFoldBtn();
+  }
+
+  function expandBlock(idx) {
+    var textarea = document.getElementById('editor-body');
+    if (!textarea) return;
+    var b = foldedBlocks[idx];
+    if (!b) return;
+
+    var token = tokenFor(idx, b.lang);
+    textarea.value = textarea.value.replace(token, b.full);
+    delete foldedBlocks[idx];
+
+    // If no more folded blocks, deactivate
+    if (Object.keys(foldedBlocks).length === 0) {
+      foldActive = false;
+      removeFoldPanel();
+      updateFoldBtn();
+    } else {
+      renderFoldPanel();
+    }
+  }
+
+  function renderFoldPanel() {
+    var container = document.getElementById('code-fold-panel');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'code-fold-panel';
+      container.className = 'code-fold-panel';
+      var writePanel = document.getElementById('write-panel');
+      var toolbar = writePanel && writePanel.querySelector('.editor-toolbar');
+      if (toolbar && toolbar.parentNode) {
+        toolbar.parentNode.insertBefore(container, toolbar.nextSibling);
+      }
+    }
+
+    var keys = Object.keys(foldedBlocks).map(Number).sort(function (a, b) { return a - b; });
+
+    container.innerHTML =
+      '<div class="fold-panel-header">' +
+        '<span class="fold-panel-label">// ' + keys.length + ' folded code block' + (keys.length !== 1 ? 's' : '') + '</span>' +
+        '<button type="button" class="fold-unfold-all-btn admin-btn" id="unfold-all-btn">⊞ unfold all</button>' +
+      '</div>' +
+      '<div class="fold-panel-list">' +
+        keys.map(function (i) {
+          var b = foldedBlocks[i];
+          var lines = b.code.split('\n').length;
+          return '<div class="fold-block-item">' +
+            '<span class="fold-block-lang">' + (b.lang || 'code') + '</span>' +
+            '<span class="fold-block-lines">' + lines + ' lines</span>' +
+            '<button type="button" class="admin-btn fold-expand-btn" data-idx="' + i + '">expand</button>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+
+    container.querySelector('#unfold-all-btn').addEventListener('click', function () { unfoldAll(false); });
+    container.querySelectorAll('.fold-expand-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () { expandBlock(parseInt(btn.dataset.idx, 10)); });
+    });
+  }
+
+  function removeFoldPanel() {
+    var panel = document.getElementById('code-fold-panel');
+    if (panel) panel.remove();
+  }
+
+  function updateFoldBtn() {
+    var btn = document.getElementById('fold-code-btn');
+    if (!btn) return;
+    if (foldActive) {
+      btn.textContent = '⊞ unfold code';
+      btn.classList.add('active');
+    } else {
+      btn.textContent = '⊟ fold code';
+      btn.classList.remove('active');
+    }
+  }
+
+  function injectFoldButton() {
+    var toolbar = document.querySelector('#write-panel .editor-toolbar');
+    if (!toolbar || toolbar.querySelector('#fold-code-btn')) return;
+
+    // Add a separator then the fold button
+    var sep = document.createElement('span');
+    sep.className = 'toolbar-sep';
+    sep.textContent = '|';
+    toolbar.appendChild(sep);
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'fold-code-btn';
+    btn.className = 'toolbar-btn';
+    btn.textContent = '⊟ fold code';
+    btn.title = 'Collapse all code blocks so they\'re easier to work around';
+    btn.addEventListener('click', function () {
+      if (foldActive) unfoldAll(false);
+      else foldAll();
+    });
+    toolbar.appendChild(btn);
   }
 
   // ── Reset state when editor opens/closes ──
@@ -117,7 +289,13 @@
     clearTimeout(autosaveTimer);
     setStatus('', '');
     injectSaveButton();
+    injectFoldButton();
     attachDirtyTracking();
+    // Reset fold state for new post
+    foldedBlocks = {};
+    foldActive = false;
+    removeFoldPanel();
+    updateFoldBtn();
     if (saveBtn) {
       saveBtn.disabled = false;
       saveBtn.textContent = '💾 save';
@@ -128,6 +306,7 @@
     isDirty = false;
     clearTimeout(autosaveTimer);
     setStatus('', '');
+    unfoldAll(true); // always restore before leaving
   }
 
   // Update "saved X ago" text every 30s
@@ -151,12 +330,10 @@
     });
     observer.observe(editorEl, { attributes: true, attributeFilter: ['class'] });
 
-    // If editor is already open on load
     if (!wasHidden) onEditorOpen();
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    // Wait for admin to be ready
     var tries = 0;
     (function waitReady() {
       var dash = document.getElementById('admin-dashboard');
@@ -164,6 +341,7 @@
       if (ready || tries++ > 80) {
         watchEditor();
         injectSaveButton();
+        injectFoldButton();
         attachDirtyTracking();
       } else {
         setTimeout(waitReady, 150);
@@ -171,10 +349,10 @@
     }());
   });
 
-  // Also retry after auth completes
   setTimeout(function () {
     watchEditor();
     injectSaveButton();
+    injectFoldButton();
     attachDirtyTracking();
   }, 2000);
 

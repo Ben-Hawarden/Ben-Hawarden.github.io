@@ -2045,6 +2045,65 @@ textarea.editor-input {
   font-size: 12px;
 }
 
+/* Code block fold panel */
+.code-fold-panel {
+  margin: 0.5rem 0;
+  border: 1px solid var(--accent-border, rgba(0,255,140,0.2));
+  border-radius: 6px;
+  background: var(--bg-card, rgba(10,10,10,0.4));
+  overflow: hidden;
+}
+.fold-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid var(--border, #1a1a1a);
+}
+.fold-panel-label {
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--accent, #00ff8c);
+  opacity: 0.8;
+}
+.fold-unfold-all-btn {
+  padding: 0.2rem 0.6rem;
+  font-size: 11px;
+}
+.fold-panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.fold-block-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-bottom: 1px solid var(--border, #1a1a1a);
+  font-family: var(--font);
+  font-size: 12px;
+}
+.fold-block-item:last-child { border-bottom: none; }
+.fold-block-lang {
+  color: var(--accent, #00ff8c);
+  min-width: 60px;
+  font-size: 11px;
+}
+.fold-block-lines {
+  color: var(--text-dim, #888);
+  font-size: 11px;
+  flex: 1;
+}
+.fold-expand-btn {
+  padding: 0.15rem 0.5rem;
+  font-size: 11px;
+}
+#fold-code-btn.active {
+  border-color: var(--accent-border, rgba(0,255,140,0.4));
+  color: var(--accent, #00ff8c);
+}
+
 .editor-row {
   display: flex;
   gap: 1rem;
