@@ -758,14 +758,16 @@ sudo -u#-1 /bin/bash
     var readEl = document.getElementById('post-reading-time');
     if (readEl) readEl.textContent = readTime + ' min read';
 
-    // ── Cover image: extract first image from body, show as blue hero banner ──
+    // ── Cover image: use post.cover field, or fall back to first image in body ──
     var postBody = post.body || '';
-    var coverUrl = '';
-    var imgMatch = postBody.match(/^!\[([^\]]*)\]\(([^)]+)\)/m);
-    if (imgMatch) {
-      coverUrl = imgMatch[2];
-      // Strip the first image from body so it isn't shown twice
-      postBody = postBody.replace(imgMatch[0], '').replace(/^\n+/, '');
+    var coverUrl = (post.cover || '').trim();
+    if (!coverUrl) {
+      var imgMatch = postBody.match(/^!\[([^\]]*)\]\(([^)]+)\)/m);
+      if (imgMatch) {
+        coverUrl = imgMatch[2];
+        // Strip from body so it isn't shown twice
+        postBody = postBody.replace(imgMatch[0], '').replace(/^\n+/, '');
+      }
     }
 
     // Inject or update cover banner
@@ -827,6 +829,7 @@ sudo -u#-1 /bin/bash
     var dateInput = document.getElementById('editor-date');
     var tagsInput = document.getElementById('editor-tags');
     var summaryInput = document.getElementById('editor-summary');
+    var coverInput = document.getElementById('editor-cover');
     var bodyInput = document.getElementById('editor-body');
     var statusInput = document.getElementById('editor-status');
     var previewPanel = document.getElementById('preview-panel');
@@ -1285,6 +1288,7 @@ sudo -u#-1 /bin/bash
       dateInput.value = data.date || new Date().toISOString().split('T')[0];
       tagsInput.value = data.tags || '';
       summaryInput.value = data.summary || '';
+      if (coverInput) coverInput.value = data.cover || '';
       bodyInput.value = tokenizeImages(data.body || '');
       statusInput.value = data.status || 'published';
       updateCounts();
@@ -1385,6 +1389,7 @@ sudo -u#-1 /bin/bash
       var date = dateInput.value;
       var tags = tagsInput.value.trim();
       var summary = summaryInput.value.trim();
+      var cover = coverInput ? coverInput.value.trim() : '';
       var body = detokenizeImages(bodyInput.value);
 
       if (!title) {
@@ -1411,6 +1416,7 @@ sudo -u#-1 /bin/bash
         date: date,
         tags: tags,
         summary: summary,
+        cover: cover,
         body: body,
         status: status
       };
