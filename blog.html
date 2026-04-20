@@ -58,29 +58,29 @@
     <p>CTF writeups, security notes, and things I've learned along the way.</p>
   </div>
 
-  <!-- Search -->
-  <div class="blog-search-bar" id="blog-search-bar">
-    <button class="blog-search-toggle" id="blog-search-toggle" aria-label="Open search" aria-expanded="false">
-      <span>⌕</span> search
-    </button>
-    <div class="blog-search-inner" id="blog-search-inner">
-      <input type="text" id="blog-search" placeholder="grep posts, tags, or content..." autocomplete="off" spellcheck="false">
-      <span class="blog-search-count" id="blog-search-count"></span>
-      <button id="blog-search-clear" aria-label="Close search">✕</button>
-    </div>
-  </div>
-
   <!-- Post frequency heatmap (populated by site-analytics.js) -->
   <div id="blog-heatmap"></div>
 
   <!-- Email notify slot (populated by site-features.js) -->
   <div id="blog-notify-slot"></div>
 
-  <!-- Section tabs -->
-  <div class="blog-tabs" id="blog-tabs">
-    <button class="blog-tab-btn active" data-section="all">all</button>
-    <button class="blog-tab-btn" data-section="ctf">🚩 ctf writeups</button>
-    <button class="blog-tab-btn" data-section="notes">📝 notes &amp; learnings</button>
+  <!-- Section tabs + search in one row -->
+  <div class="blog-tabs-row">
+    <div class="blog-tabs" id="blog-tabs">
+      <button class="blog-tab-btn active" data-section="all">all</button>
+      <button class="blog-tab-btn" data-section="ctf">🚩 ctf writeups</button>
+      <button class="blog-tab-btn" data-section="notes">📝 notes &amp; learnings</button>
+    </div>
+    <div class="blog-search-bar" id="blog-search-bar">
+      <button class="blog-search-toggle" id="blog-search-toggle" aria-label="Open search" aria-expanded="false">
+        <span>⌕</span> search
+      </button>
+      <div class="blog-search-inner" id="blog-search-inner">
+        <input type="text" id="blog-search" placeholder="grep posts, tags, or content..." autocomplete="off" spellcheck="false">
+        <span class="blog-search-count" id="blog-search-count"></span>
+        <button id="blog-search-clear" aria-label="Close search">✕</button>
+      </div>
+    </div>
   </div>
 
   <!-- CTF Writeups -->

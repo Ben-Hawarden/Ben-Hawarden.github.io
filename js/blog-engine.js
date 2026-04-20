@@ -1266,6 +1266,9 @@ sudo -u#-1 /bin/bash
       savePostBtn.textContent = editingId ? 'update post' : 'publish post';
       deleteFromEditorBtn.style.display = editingId ? '' : 'none';
 
+      // Expose editingId to external scripts (e.g. autosave)
+      editorEl.dataset.editingId = editingId || '';
+
       setTimeout(function () { titleInput.focus(); }, 100);
     }
 
@@ -1326,7 +1329,7 @@ sudo -u#-1 /bin/bash
       var mod = e.ctrlKey || e.metaKey;
       if (mod && e.key.toLowerCase() === 's') {
         e.preventDefault();
-        saveCurrentPost('draft');
+        saveCurrentPost('draft', { keepOpen: true });
       } else if (mod && e.key === 'Enter') {
         e.preventDefault();
         saveCurrentPost('published');
@@ -1342,7 +1345,8 @@ sudo -u#-1 /bin/bash
     }
     document.addEventListener('keydown', editorShortcut);
 
-    function saveCurrentPost(status) {
+    function saveCurrentPost(status, opts) {
+      opts = opts || {};
       var title = titleInput.value.trim();
       var date = dateInput.value;
       var tags = tagsInput.value.trim();
@@ -1354,18 +1358,21 @@ sudo -u#-1 /bin/bash
         titleInput.style.borderColor = 'var(--rose)';
         setTimeout(function () { titleInput.style.borderColor = ''; }, 2000);
         showToast('Title is required');
-        return;
+        return false;
       }
       if (!date) {
         dateInput.focus();
         showToast('Date is required');
-        return;
+        return false;
       }
 
       var posts = getPosts();
 
+      // Assign a stable ID now (needed for in-place / autosave)
+      if (!editingId) editingId = 'post_' + Date.now();
+
       var post = {
-        id: editingId || ('post_' + Date.now()),
+        id: editingId,
         title: title,
         date: date,
         tags: tags,
@@ -1374,15 +1381,31 @@ sudo -u#-1 /bin/bash
         status: status
       };
 
+      // Keep the data attribute current so external scripts can read it
+      editorEl.dataset.editingId = editingId;
+
       if (window.BensecDB) {
         BensecDB.savePost(post);
       }
+
+      if (opts.keepOpen) {
+        // In-place save: stay in editor
+        showToast(status === 'draft' ? 'Draft saved' : 'Post saved');
+        // Update heading/button to reflect we now have an ID
+        if (editorHeading) editorHeading.textContent = 'Edit post';
+        if (savePostBtn) savePostBtn.textContent = 'update post';
+        if (deleteFromEditorBtn) deleteFromEditorBtn.style.display = '';
+        return true;
+      }
+
       clearDraft();
       hideEditor();
       editingId = null;
+      editorEl.dataset.editingId = '';
       renderAdminPosts();
       updateStats();
       showToast(status === 'draft' ? 'Saved as draft' : 'Post published');
+      return true;
     }
 
     // ── Delete from editor ──
@@ -1972,6 +1995,11 @@ toolList + '\n\n' +
       bodyInput.focus();
       updateCounts();
     }
+
+    // Expose save for admin-extras-6 autosave
+    window._adminSaveInPlace = function (status) {
+      return saveCurrentPost(status || 'draft', { keepOpen: true });
+    };
   }
 
   // ══════════════════════════════════
@@ -2395,5 +2423,5 @@ toolList + '\n\n' +
     if (document.getElementById('admin-dashboard')) initCheatsheetAdmin();
   });
 
-  window.blogEngine = { getPosts: getPosts, savePosts: savePosts, md: md, renderPostsOnIndex: renderPostsOnIndex };
+  window.blogEngine = { getPosts: getPosts, savePosts: savePosts, md: md, renderPostsOnIndex: renderPostsOnIndex, saveCurrentPost: function (status, opts) { /* exposed for admin-extras-6 */ } };
 })();
