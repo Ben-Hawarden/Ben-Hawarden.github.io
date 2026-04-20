@@ -762,7 +762,7 @@ sudo -u#-1 /bin/bash
     var postBody = post.body || '';
     var coverUrl = (post.cover || '').trim();
     if (!coverUrl) {
-      var imgMatch = postBody.match(/^!\[([^\]]*)\]\(([^)]+)\)/m);
+      var imgMatch = postBody.match(/!\[([^\]]*)\]\(([^)]+)\)/);
       if (imgMatch) {
         coverUrl = imgMatch[2];
         // Strip from body so it isn't shown twice
