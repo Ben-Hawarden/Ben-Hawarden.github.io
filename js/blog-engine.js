@@ -758,7 +758,41 @@ sudo -u#-1 /bin/bash
     var readEl = document.getElementById('post-reading-time');
     if (readEl) readEl.textContent = readTime + ' min read';
 
-    body.innerHTML = md(post.body || '');
+    // ── Cover image: extract first image from body, show as blue hero banner ──
+    var postBody = post.body || '';
+    var coverUrl = '';
+    var imgMatch = postBody.match(/^!\[([^\]]*)\]\(([^)]+)\)/m);
+    if (imgMatch) {
+      coverUrl = imgMatch[2];
+      // Strip the first image from body so it isn't shown twice
+      postBody = postBody.replace(imgMatch[0], '').replace(/^\n+/, '');
+    }
+
+    // Inject or update cover banner
+    var hero = document.querySelector('.post-hero');
+    var existing = document.getElementById('post-cover-banner');
+    if (coverUrl && hero) {
+      if (!existing) {
+        existing = document.createElement('div');
+        existing.id = 'post-cover-banner';
+        existing.className = 'post-cover-banner';
+        hero.parentNode.insertBefore(existing, hero);
+      }
+      existing.style.backgroundImage = 'url(' + coverUrl + ')';
+      existing.style.display = '';
+    } else if (existing) {
+      existing.style.display = 'none';
+    }
+
+    // Update og:image meta tag
+    if (coverUrl) {
+      var ogImg = document.querySelector('meta[property="og:image"]');
+      if (ogImg) ogImg.setAttribute('content', coverUrl);
+      var twImg = document.querySelector('meta[name="twitter:image"]');
+      if (twImg) twImg.setAttribute('content', coverUrl);
+    }
+
+    body.innerHTML = md(postBody);
   }
 
   // ══════════════════════════════════

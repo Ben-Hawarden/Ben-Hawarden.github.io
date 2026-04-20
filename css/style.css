@@ -1128,6 +1128,31 @@ footer {
   text-decoration: none;
 }
 
+/* Post cover image banner */
+.post-cover-banner {
+  width: 100%;
+  height: 260px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  margin-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+.post-cover-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 40, 180, 0.72) 0%,
+    rgba(0, 100, 255, 0.45) 50%,
+    rgba(0, 180, 255, 0.3) 100%
+  );
+  mix-blend-mode: multiply;
+}
+
 /* Hero header */
 .post-hero {
   padding: 2.5rem 0 2rem;
