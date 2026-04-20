@@ -1745,7 +1745,6 @@ sudo -u#-1 /bin/bash
         var toolList = tools ? tools.split(/\s+/).map(function(t) { return '- `' + t + '`'; }).join('\n') : '- `nmap`\n- `gobuster`';
 
         var template =
-(coverImage ? '![' + machine + '](' + coverImage + ')\n\n' : '') +
 '## 🖥️ Machine Info\n\n' +
 '| Field | Details |\n' +
 '|---|---|\n' +
@@ -1792,6 +1791,7 @@ toolList + '\n\n' +
         dateInput.value = today;
         tagsInput.value = 'walkthrough ' + platform.toLowerCase() + ' ' + os.toLowerCase() + ' ' + difficulty.toLowerCase();
         summaryInput.value = difficulty + ' ' + os + ' machine on ' + platform + '. ' + (tools ? 'Tools: ' + tools.split(/\s+/).slice(0, 3).join(', ') + '.' : '');
+        if (coverInput && coverImage) coverInput.value = coverImage;
         bodyInput.value = template;
         statusInput.value = 'draft';
         updateCounts();
